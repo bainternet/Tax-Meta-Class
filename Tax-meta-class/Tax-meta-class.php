@@ -71,6 +71,14 @@ class Tax_Meta_Class {
 	protected $_Local_images;
 	
 	/**
+	 * What form is this? edit or new term.
+	 *
+	 * @var string
+	 * @access protected
+	 * $since 1.0
+	 */
+	protected $_form_type;
+	/**
 	 * SelfPath to allow themes as well as plugins.
 	 *
 	 * @var string
@@ -146,9 +154,9 @@ class Tax_Meta_Class {
 		$taxnow = ($_REQUEST['taxonomy']);
 		if (in_array($taxnow,$this->_meta_box['pages'])){
 			// Enqueue Meta Box Style
-			wp_enqueue_style( 'at-meta-box', $plugin_path . '/css/meta-box.css' );
+			wp_enqueue_style( 'tax-meta-clss', $plugin_path . '/css/Tax-meta-class.css' );
 			// Enqueue Meta Box Scripts
-			wp_enqueue_script( 'at-meta-box', $plugin_path . '/js/meta-box.js', array( 'jquery' ), null, true );
+			wp_enqueue_script( 'tax-meta-clss', $plugin_path . '/js/tax-meta-clss.js', array( 'jquery' ), null, true );
 		
 		}
 		
@@ -423,9 +431,9 @@ class Tax_Meta_Class {
 		// Loop through array
 		foreach ( $this->_meta_box['pages'] as $page ) {
 			//add fields to edit form
-			add_action($page.'_edit_form_fields',array( &$this, 'show' ));
+			add_action($page.'_edit_form_fields',array( &$this, 'show_edit_form' ));
 			//add fields to add new form
-			add_action($page.'_add_form_fields',array( &$this, 'show' )); 
+			add_action($page.'_add_form_fields',array( &$this, 'show_new_form' )); 
 			// this saves the edit fields
 			add_action( 'edited_'.$page, array( &$this, 'save' ), 10, 2);
 			// this saves the add fields
@@ -435,6 +443,30 @@ class Tax_Meta_Class {
 	}
 	
 	/**
+	 * Callback function to show fields on add new taxonomy term form.
+	 *
+	 * @since 1.0
+	 * @access public 
+	 */
+	public function show_new_form($term_id){
+		$this->_form_type = 'new';
+		$this->show($term_id);
+	}
+	
+	/**
+	 * Callback function to show fields on term edit form.
+	 *
+	 * @since 1.0
+	 * @access public 
+	 */
+	public function show_edit_form($term_id){
+		$this->_form_type = 'edit';
+		$this->show($term_id);
+	}
+	
+	
+	
+	/**
 	 * Callback function to show fields in meta box.
 	 *
 	 * @since 1.0
@@ -442,18 +474,15 @@ class Tax_Meta_Class {
 	 */
 	public function show($term_id) {
 		
-		//global $post;
-		//var_dump($this->_fields);
 		wp_nonce_field( basename(__FILE__), 'tax_meta_class_nonce' );
-		echo '<table class="form-table">';
 		
 		foreach ( $this->_fields as $field ) {
 			$meta = $this->get_tax_meta( $term_id, $field['id'], !$field['multiple'] );
 			$meta = ( $meta !== '' ) ? $meta : $field['std'];
 			if ('image' != $field['type'] && $field['type'] != 'repeater')
 				$meta = is_array( $meta ) ? array_map( 'esc_attr', $meta ) : esc_attr( $meta );
-			echo '<tr>';
 			
+			echo '<tr class="form-field">';
 			// Call Separated methods for displaying each type of field.
 			call_user_func ( array( &$this, 'show_field_' . $field['type'] ), $field, $meta );
 			echo '</tr>';
@@ -525,6 +554,7 @@ class Tax_Meta_Class {
 				$c = $c + 1;
 				
     		}
+    		$this->show_field_end( $field, $meta );
     	}
 
 		echo '<img src="';
@@ -606,12 +636,19 @@ class Tax_Meta_Class {
 				echo "<td class='at-field'>";
 			}
 		}else{
-			echo "<td class='at-field'>";
+			if ($this->_form_type == 'edit'){
+				echo '<th valign="top" scope="row">';
+			}else{
+				echo '<td><div class="form-field">';
+			}
 		}
 		if ( $field['name'] != '' || $field['name'] != FALSE ) {
-			echo "<div class='at-label'>";
+			//echo "<div class='at-label'>";
 				echo "<label for='{$field['id']}'>{$field['name']}</label>";
-			echo "</div>";
+			//echo "</div>";
+		}
+		if ($this->_form_type == 'edit'){
+				echo '</th><td>';
 		}
 	}
 	
@@ -640,9 +677,12 @@ class Tax_Meta_Class {
 			}		
 		}else{
 			if ( $field['desc'] != '' ) {
-				echo "<div class='desc-field'>{$field['desc']}</div></td>";
-			} else {
-				echo "</td>";
+				echo "<div class='desc-field'>{$field['desc']}</div>";
+			}
+			if ($this->_form_type == 'edit'){
+				echo '<td>';	
+			}else{
+				echo '<td></div>';
 			}
 		}
 	}
@@ -756,8 +796,8 @@ class Tax_Meta_Class {
 	public function show_field_checkbox( $field, $meta ) {
 	
 		$this->show_field_begin($field, $meta);
-		echo "<input type='checkbox' class='rw-checkbox' name='{$field['id']}' id='{$field['id']}'" . checked(!empty($meta), true, false) . " /> {$field['desc']}</td>";
-			
+		echo "<input type='checkbox' class='rw-checkbox' name='{$field['id']}' id='{$field['id']}'" . checked(!empty($meta), true, false) . " /> {$field['desc']}";
+		$this->show_field_end( $field, $meta );
 	}
 	
 	/**
@@ -777,7 +817,7 @@ class Tax_Meta_Class {
 			echo "<textarea class='at-wysiwyg theEditor large-text' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
 		}else{
 			// Use new wp_editor() since WP 3.3
-			wp_editor( html_entity_decode($meta), $field['id'], array( 'editor_class' => 'at-wysiwyg' ) );
+			wp_editor( stripslashes(html_entity_decode($meta)), $field['id'], array( 'editor_class' => 'at-wysiwyg' ) );
 		}
 		$this->show_field_end( $field, $meta );
 	}
@@ -822,6 +862,7 @@ class Tax_Meta_Class {
 				echo "<a class='at-add-file button' href='#'>" . __( 'Add more files' ) . "</a>";
 			echo "</div><!-- End .new-files -->";
 		echo "</td>";
+		$this->show_field_end( $field, $meta );
 	}
 	
 	/**
@@ -851,6 +892,7 @@ class Tax_Meta_Class {
 			$html .= "<input class='at-upload_image_button' type='button' rel='".$field['id']."' value='Upload Image' />";
 		}
 		echo $html;
+		$this->show_field_end( $field, $meta );
 	}
 	
 	/**

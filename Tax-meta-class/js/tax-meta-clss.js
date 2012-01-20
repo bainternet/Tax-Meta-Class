@@ -309,7 +309,7 @@ jQuery(document).ready(function($) {
 		data = {
 				action: 'at_delete_mupload',
 				_wpnonce: $('#nonce-delete-mupload_' + field_id).val(),
-				post_id: jQuery('#post_ID').val(),
+				post_id: get_query_var('tag_ID'),
 				field_id: field_id,
 				attachment_id: jQuery(at_id).val()
 		};
@@ -338,7 +338,7 @@ jQuery(document).ready(function($) {
 		jQuery('.at-upload_image_button').live('click',function(e){
 			formfield1 = jQuery(this).prev();
 			formfield2 = jQuery(this).prev().prev();			
-			tb_show('', 'media-upload.php?post_id='+ jQuery('#post_ID').val() + '&type=image&amp;TB_iframe=true');
+			tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
 			//store old send to editor function
 			window.restore_send_to_editor = window.send_to_editor;
 			//overwrite send to editor function

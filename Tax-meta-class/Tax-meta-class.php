@@ -314,8 +314,9 @@ class Tax_Meta_Class {
 		$ok = false;
 		if (strpos($field_id, '[') === false){
 			check_admin_referer( "at-delete-mupload_".urldecode($field_id));
-			$ok = $this->delete_tax_meta( $term_id, $field_id );
-			$ok = $ok && wp_delete_attachment( $attachment_id );
+			if ($term_id > 0)
+				$this->delete_tax_meta( $term_id, $field_id );
+			$ok = wp_delete_attachment( $attachment_id );
 		}else{
 			$f = explode('[',urldecode($field_id));
 			$f_fiexed = array();
@@ -325,8 +326,9 @@ class Tax_Meta_Class {
 			$saved = $this->get_tax_meta($term_id,$f[0],true);
 			if (isset($saved[$f[1]][$f[2]])){
 				unset($saved[$f[1]][$f[2]]);
-				$ok = update_post_meta($term_id,$f[0],$saved);
-				$ok = $ok && wp_delete_attachment( $attachment_id );
+				if ($term_id > 0)
+					update_post_meta($term_id,$f[0],$saved);
+				$ok = wp_delete_attachment( $attachment_id );
 			}
 		}
 
@@ -1859,3 +1861,40 @@ class Tax_Meta_Class {
 } // End Class
 
 endif; // End Check Class Exists
+
+/*
+ * meta functions for easy access:
+ */
+
+	//get term meta field
+	if (!function_exists('get_tax_meta')){
+		function get_tax_meta($term_id,$key,$multi = false){
+			$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+			$m = get_option( 'tax_meta_'.$t_id);	
+			if (isset($m[$key])){
+				return $m[$key];
+			}else{
+				return '';
+			}
+		}
+	}
+	
+	//delete meta
+	if (!function_exists('delete_tax_meta')){
+		function delete_tax_meta($term_id,$key){
+			$m = get_option( 'tax_meta_'.$term_id);
+			if (isset($m[$key])){
+				unset($m[$key]);
+			}
+			update_option('tax_meta_'.$term_id,$m);
+		}
+	}
+	
+	//update meta
+	if (!function_exists('update_tax_meta')){
+		function update_tax_meta($term_id,$key,$value){
+			$m = get_option( 'tax_meta_'.$term_id);
+			$m[$key] = $value;
+			update_option('tax_meta_'.$term_id,$m);
+		}
+	}

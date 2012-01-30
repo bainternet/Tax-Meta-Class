@@ -151,7 +151,7 @@ class Tax_Meta_Class {
 		/* 
 		 * since 1.0
 		 */
-		$taxnow = (isset($_REQUEST['taxonomy'])? $_REQUEST['taxonomy']: '';
+		$taxnow = isset($_REQUEST['taxonomy'])? $_REQUEST['taxonomy']: '';
 		if (in_array($taxnow,$this->_meta_box['pages'])){
 			// Enqueue Meta Box Style
 			wp_enqueue_style( 'tax-meta-clss', $plugin_path . '/css/Tax-meta-class.css' );

@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.0
+ * @version 1.1
  * @copyright 2012 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -1276,19 +1276,15 @@ class Tax_Meta_Class {
 	public function add_missed_values() {
 		
 		// Default values for meta box
-		$this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ), $this->_meta_box );
+		$this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ), (array)$this->_meta_box );
 
 		// Default values for fields
 		foreach ( $this->_fields as &$field ) {
-			
 			$multiple = in_array( $field['type'], array( 'checkbox_list', 'file', 'image' ) );
 			$std = $multiple ? array() : '';
 			$format = 'date' == $field['type'] ? 'yy-mm-dd' : ( 'time' == $field['type'] ? 'hh:mm' : '' );
-
 			$field = array_merge( array( 'multiple' => $multiple, 'std' => $std, 'desc' => '', 'format' => $format, 'validate_func' => '' ), $field );
-		
 		} // End foreach
-		
 	}
 
 	/**

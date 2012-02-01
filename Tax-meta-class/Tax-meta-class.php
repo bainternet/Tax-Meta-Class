@@ -666,20 +666,20 @@ class Tax_Meta_Class {
 		if (isset($field['group'])){
 			if ($group == 'end'){
 				if ( $field['desc'] != '' ) {
-					echo "<div class='desc-field'>{$field['desc']}</div></td>";
+					echo "<p class='desc-field'>{$field['desc']}</p></td>";
 				} else {
 					echo "</td>";
 				}
 			}else {
 				if ( $field['desc'] != '' ) {
-					echo "<div class='desc-field'>{$field['desc']}</div><br/>";	
+					echo "<p class='desc-field'>{$field['desc']}</p><br/>";	
 				}else{
 					echo '<br/>';
 				}	
 			}		
 		}else{
 			if ( $field['desc'] != '' ) {
-				echo "<div class='desc-field'>{$field['desc']}</div>";
+				echo "<p class='desc-field'>{$field['desc']}</p>";
 			}
 			if ($this->_form_type == 'edit'){
 				echo '<td>';	

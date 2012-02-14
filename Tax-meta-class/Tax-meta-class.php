@@ -151,7 +151,7 @@ class Tax_Meta_Class {
 		/* 
 		 * since 1.0
 		 */
-		$taxnow = ($_REQUEST['taxonomy']);
+		$taxnow = isset($_REQUEST['taxonomy'])? $_REQUEST['taxonomy']: '';
 		if (in_array($taxnow,$this->_meta_box['pages'])){
 			// Enqueue Meta Box Style
 			wp_enqueue_style( 'tax-meta-clss', $plugin_path . '/css/Tax-meta-class.css' );
@@ -665,20 +665,20 @@ class Tax_Meta_Class {
 		if (isset($field['group'])){
 			if ($group == 'end'){
 				if ( $field['desc'] != '' ) {
-					echo "<div class='desc-field'>{$field['desc']}</div></td>";
+					echo "<p class='desc-field'>{$field['desc']}</p></td>";
 				} else {
 					echo "</td>";
 				}
 			}else {
 				if ( $field['desc'] != '' ) {
-					echo "<div class='desc-field'>{$field['desc']}</div><br/>";	
+					echo "<p class='desc-field'>{$field['desc']}</p><br/>";	
 				}else{
 					echo '<br/>';
 				}	
 			}		
 		}else{
 			if ( $field['desc'] != '' ) {
-				echo "<div class='desc-field'>{$field['desc']}</div>";
+				echo "<p class='desc-field'>{$field['desc']}</p>";
 			}
 			if ($this->_form_type == 'edit'){
 				echo '<td>';	
@@ -1275,19 +1275,15 @@ class Tax_Meta_Class {
 	public function add_missed_values() {
 		
 		// Default values for meta box
-		$this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ), $this->_meta_box );
+		$this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ), (array)$this->_meta_box );
 
 		// Default values for fields
 		foreach ( $this->_fields as &$field ) {
-			
 			$multiple = in_array( $field['type'], array( 'checkbox_list', 'file', 'image' ) );
 			$std = $multiple ? array() : '';
 			$format = 'date' == $field['type'] ? 'yy-mm-dd' : ( 'time' == $field['type'] ? 'hh:mm' : '' );
-
 			$field = array_merge( array( 'multiple' => $multiple, 'std' => $std, 'desc' => '', 'format' => $format, 'validate_func' => '' ), $field );
-		
 		} // End foreach
-		
 	}
 
 	/**

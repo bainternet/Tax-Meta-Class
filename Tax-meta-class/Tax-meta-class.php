@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.0
+ * @version 1.1
  * @copyright 2012 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -507,8 +507,7 @@ class Tax_Meta_Class {
 		echo "<div class='at-repeat' id='{$field['id']}'>";
 		
 		$c = 0;
-		$meta = $this->get_tax_meta($term_id,$field['id'],true);
-		
+				
     	if (count($meta) > 0 && is_array($meta) ){
    			foreach ($meta as $me){
    				//for labling toggles

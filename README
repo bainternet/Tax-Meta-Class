@@ -21,7 +21,12 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
-=1.1= fixed repeater admin issue
+=1.2= 
+fixed validation callback
+
+
+=1.1= 
+fixed repeater admin issue
 
 = 1.0 =
 * First Release

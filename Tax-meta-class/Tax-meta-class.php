@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.1
+ * @version 1.2
  * @copyright 2012 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -1071,7 +1071,7 @@ class Tax_Meta_Class {
 
 			// Validate meta value
 			if ( class_exists( 'Tax_Meta_Validate' ) && method_exists( 'Tax_Meta_Validate', $field['validate_func'] ) ) {
-				$new = call_user_func( array( 'at_Meta_Box_Validate', $field['validate_func'] ), $new );
+				$new = call_user_func( array( 'Tax_Meta_Validate', $field['validate_func'] ), $new );
 			}
 			
 			//skip on Paragraph field

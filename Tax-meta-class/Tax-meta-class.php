@@ -108,9 +108,9 @@ class Tax_Meta_Class {
 		$this->_Local_images = (isset($meta_box['local_images'])) ? true : false;
 		$this->add_missed_values();
 		if (isset($meta_box['use_with_theme']))
-			if ($meta_box['use_with_theme'] == true){
+			if ($meta_box['use_with_theme'] === true){
 				$this->SelfPath = get_stylesheet_directory_uri() . '/Tax-meta-class';
-			}elseif($meta_box['use_with_theme'] == false){
+			}elseif($meta_box['use_with_theme'] === false){
 				$this->SelfPath = plugins_url( 'Tax-meta-class', plugin_basename( dirname( __FILE__ ) ) );
 			}else{
 				$this->SelfPath = $meta_box['use_with_theme'];

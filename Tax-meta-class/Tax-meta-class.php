@@ -108,9 +108,9 @@ class Tax_Meta_Class {
 		$this->_Local_images = (isset($meta_box['local_images'])) ? true : false;
 		$this->add_missed_values();
 		if (isset($meta_box['use_with_theme']))
-			if ($meta_box['use_with_theme'] === true){
+			if ($meta_box['use_with_theme'] == true){
 				$this->SelfPath = get_stylesheet_directory_uri() . '/Tax-meta-class';
-			}elseif($meta_box['use_with_theme'] === false){
+			}elseif($meta_box['use_with_theme'] == false){
 				$this->SelfPath = plugins_url( 'Tax-meta-class', plugin_basename( dirname( __FILE__ ) ) );
 			}else{
 				$this->SelfPath = $meta_box['use_with_theme'];
@@ -124,12 +124,6 @@ class Tax_Meta_Class {
 		
 		// Add Actions
 		add_action( 'admin_init', array( &$this, 'add' ) );
-		
-		// Check for special fields and add needed actions for them.
-		$this->check_field_upload();
-		$this->check_field_color();
-		$this->check_field_date();
-		$this->check_field_time();
 		
 		// Load common js, css files
 		// Must enqueue for all pages as we need js for the media upload, too.
@@ -151,8 +145,13 @@ class Tax_Meta_Class {
 		/* 
 		 * since 1.0
 		 */
-		$taxnow = isset($_REQUEST['taxonomy'])? $_REQUEST['taxonomy']: '';
+		$taxnow = ($_REQUEST['taxonomy']);
 		if (in_array($taxnow,$this->_meta_box['pages'])){
+			// Check for special fields and add needed actions for them.
+			$this->check_field_upload();
+			$this->check_field_color();
+			$this->check_field_date();
+			$this->check_field_time();
 			// Enqueue Meta Box Style
 			wp_enqueue_style( 'tax-meta-clss', $plugin_path . '/css/Tax-meta-class.css' );
 			// Enqueue Meta Box Scripts
@@ -180,7 +179,7 @@ class Tax_Meta_Class {
 		// Make upload feature work event when custom post type doesn't support 'editor'
 		wp_enqueue_script( 'media-upload' );
 		wp_enqueue_script('thickbox');
-		add_thickbox();
+		//add_thickbox();
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		
@@ -665,20 +664,20 @@ class Tax_Meta_Class {
 		if (isset($field['group'])){
 			if ($group == 'end'){
 				if ( $field['desc'] != '' ) {
-					echo "<p class='desc-field'>{$field['desc']}</p></td>";
+					echo "<div class='desc-field'>{$field['desc']}</div></td>";
 				} else {
 					echo "</td>";
 				}
 			}else {
 				if ( $field['desc'] != '' ) {
-					echo "<p class='desc-field'>{$field['desc']}</p><br/>";	
+					echo "<div class='desc-field'>{$field['desc']}</div><br/>";	
 				}else{
 					echo '<br/>';
 				}	
 			}		
 		}else{
 			if ( $field['desc'] != '' ) {
-				echo "<p class='desc-field'>{$field['desc']}</p>";
+				echo "<div class='desc-field'>{$field['desc']}</div>";
 			}
 			if ($this->_form_type == 'edit'){
 				echo '<td>';	
@@ -1071,7 +1070,7 @@ class Tax_Meta_Class {
 
 			// Validate meta value
 			if ( class_exists( 'Tax_Meta_Validate' ) && method_exists( 'Tax_Meta_Validate', $field['validate_func'] ) ) {
-				$new = call_user_func( array( 'Tax_Meta_Validate', $field['validate_func'] ), $new );
+				$new = call_user_func( array( 'at_Meta_Box_Validate', $field['validate_func'] ), $new );
 			}
 			
 			//skip on Paragraph field
@@ -1275,15 +1274,19 @@ class Tax_Meta_Class {
 	public function add_missed_values() {
 		
 		// Default values for meta box
-		$this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ), (array)$this->_meta_box );
+		$this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ), $this->_meta_box );
 
 		// Default values for fields
 		foreach ( $this->_fields as &$field ) {
+			
 			$multiple = in_array( $field['type'], array( 'checkbox_list', 'file', 'image' ) );
 			$std = $multiple ? array() : '';
 			$format = 'date' == $field['type'] ? 'yy-mm-dd' : ( 'time' == $field['type'] ? 'hh:mm' : '' );
+
 			$field = array_merge( array( 'multiple' => $multiple, 'std' => $std, 'desc' => '', 'format' => $format, 'validate_func' => '' ), $field );
+		
 		} // End foreach
+		
 	}
 
 	/**
@@ -1723,7 +1726,7 @@ class Tax_Meta_Class {
 		$q = array('hide_empty' => 0);
 		$tax = 'category';
 		$type = 'select';
-		$temp = array($tax,$type,$q);
+		$temp = array('taxonomy' => $tax,'type' => $type,'args' => $q);
 		$options = array_merge($temp,$options);
 		$new_field = array('type' => 'taxonomy','id'=> $id,'desc' => '','name' => 'Taxonomy Field','options'=> $options);
 		$new_field = array_merge($new_field, $args);
@@ -1793,10 +1796,6 @@ class Tax_Meta_Class {
 	 */
 	public function Finish() {
 		$this->add_missed_values();
-		$this->check_field_upload();
-		$this->check_field_color();
-		$this->check_field_date();
-		$this->check_field_time();
 	}
 	
 	/**

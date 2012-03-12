@@ -21,6 +21,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+= 1.3 =
+Fixed WP debug errors
+
 = 1.2=
 Fixed debug Errors
 

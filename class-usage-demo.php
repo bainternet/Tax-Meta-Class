@@ -3,7 +3,7 @@
 Plugin Name: Demo Tax meta class
 Plugin URI: http://en.bainternet.info
 Description: Tax meta class usage demo
-Version: 1.2
+Version: 1.3
 Author: Bainternet, Ohad Raz
 Author URI: http://en.bainternet.info
 */
@@ -66,7 +66,7 @@ if (is_admin()){
 	//taxonomy field
 	$my_meta->addTaxonomy($prefix.'taxonomy_field_id',array('taxonomy' => 'category'),array('name'=> 'My Taxonomy '));
 	//posts field
-	$my_meta->addPosts($prefix.'posts_field_id',array('post_type' => 'post'),array('name'=> 'My Posts '));
+	$my_meta->addPosts($prefix.'posts_field_id',array('args' => array('post_type' => 'page')),array('name'=> 'My Posts '));
 	
 	/*
 	 * To Create a reapeater Block first create an array of fields

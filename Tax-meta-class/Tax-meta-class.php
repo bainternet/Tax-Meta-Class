@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.3
+ * @version 1.4
  * @copyright 2012 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -179,7 +179,7 @@ class Tax_Meta_Class {
 		// Make upload feature work event when custom post type doesn't support 'editor'
 		wp_enqueue_script( 'media-upload' );
 		wp_enqueue_script('thickbox');
-		//add_thickbox();
+		add_thickbox();
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		

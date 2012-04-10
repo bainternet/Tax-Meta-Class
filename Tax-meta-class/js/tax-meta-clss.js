@@ -61,17 +61,6 @@ function update_repeater_fields(){
 		});
 	
 		/**
-		 * Add Files.
-		 *
-		 * @since 1.0
-		 */
-		$('.at-add-file').click( function() {
-			var $first = $(this).parent().find('.file-input:first');
-			$first.clone().insertAfter($first).show();
-			return false;
-		});
-	
-		/**
 		 * Delete File.
 		 *
 		 * @since 1.0
@@ -79,8 +68,8 @@ function update_repeater_fields(){
 		$('.at-upload').delegate( '.at-delete-file', 'click' , function() {
 			
 			var $this 	= $(this),
-					$parent = $this.parent(),
-					data 		= $this.attr('rel');
+				$parent = $this.parent(),
+				data = $this.attr('rel');
 					
 			$.post( ajaxurl, { action: 'at_delete_file', data: data }, function(response) {
 				response == '0' ? ( alert( 'File has been successfully deleted.' ), $parent.remove() ) : alert( 'You do NOT have permission to delete this file.' );
@@ -120,10 +109,10 @@ function update_repeater_fields(){
 		 */
 		$('.at-upload-button').click( function() {
 			
-			var data 			= $(this).attr('rel').split('|'),
-					post_id 	= data[0],
-					field_id 	= data[1],
-					backup 		= window.send_to_editor; // backup the original 'send_to_editor' function which adds images to the editor
+			var data = $(this).attr('rel').split('|'),
+				post_id 	= data[0],
+				field_id 	= data[1],
+				backup 		= window.send_to_editor; // backup the original 'send_to_editor' function which adds images to the editor
 					
 			// change the function to make it adds images to our section of uploaded images
 			window.send_to_editor = function(html) {
@@ -231,9 +220,10 @@ jQuery(document).ready(function($) {
 		
 		var $this 	= $(this),
 				$parent = $this.parent(),
-				data 		= $this.attr('rel');
-				
-		$.post( ajaxurl, { action: 'at_delete_file', data: data }, function(response) {
+				data = $this.attr('rel');
+		
+		var ind = $(this).index()
+		$.post( ajaxurl, { action: 'at_delete_file', data: data, tag_id: get_query_var('tag_ID') }, function(response) {
 			response == '0' ? ( alert( 'File has been successfully deleted.' ), $parent.remove() ) : alert( 'You do NOT have permission to delete this file.' );
 		});
 		

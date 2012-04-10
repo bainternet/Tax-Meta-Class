@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.5
+ * @version 1.6
  * @copyright 2012 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -174,7 +174,7 @@ class Tax_Meta_Class {
 			return;
 		
 		// Add data encoding type for file uploading.	
-		add_action( 'post_edit_form_tag', array( &$this, 'add_enctype' ) );
+		add_action( 'admin_footer', array( &$this, 'add_enctype' ) );
 		
 		// Make upload feature work event when custom post type doesn't support 'editor'
 		wp_enqueue_script( 'media-upload' );
@@ -187,12 +187,6 @@ class Tax_Meta_Class {
 		add_filter( 'media_upload_gallery', array( &$this, 'insert_images' ) );
 		add_filter( 'media_upload_library', array( &$this, 'insert_images' ) );
 		add_filter( 'media_upload_image', 	array( &$this, 'insert_images' ) );
-			
-		// Delete all attachments when delete custom post type.
-		add_action( 'wp_ajax_at_delete_file', 		array( &$this, 'delete_file' ) );
-		add_action( 'wp_ajax_at_reorder_images', 	array( &$this, 'reorder_images' ) );
-		// Delete file via Ajax
-		add_action( 'wp_ajax_at_delete_mupload', array( $this, 'wp_ajax_delete_image' ) );
 	}
 	
 	/**
@@ -202,7 +196,13 @@ class Tax_Meta_Class {
 	 * @access public
 	 */
 	public function add_enctype () {
-		echo ' enctype="multipart/form-data"';
+	 ?> 
+	 <script>
+	    jQuery(document).ready(function(){
+	       jQuery("#edittag").attr('enctype','multipart/form-data');
+	    });
+	 </script>
+	 <?php
 	}
 	
 	/**
@@ -285,20 +285,26 @@ class Tax_Meta_Class {
 	 * @access public 
 	 */
 	public function delete_file() {
-		
 		// If data is not set, die.
 		if ( ! isset( $_POST['data'] ) )
 			die();
 			
 		list($nonce, $term_id, $key, $attach_id) = explode('|', $_POST['data']);
-		
-		if ( ! wp_verify_nonce( $nonce, 'at_ajax_delete' ) )
+		$term_id = $_POST['tag_id'];
+		$arrKey = (int)$_POST['idx'];
+		if ( ! wp_verify_nonce( $nonce, 'at_ajax_delete_file' ) )
 			die( '1' );
-			
-		$this->delete_tax_meta( $term_id, $key, $attach_id );
 		
+		$saved = $this->get_tax_meta($term_id,$key,true);
+		$index = array_search($attach_id, $saved);
+		unset($saved[$index]);
+		wp_delete_attachment( $attach_id );
+		if (count($saved) > 0){
+			$this->update_tax_meta($term_id,$key,$saved);
+			die('0');
+		}
+		$this->delete_tax_meta( $term_id, $key);
 		die( '0' );
-	
 	}
 	/**
 	* Ajax callback for deleting files.
@@ -440,6 +446,11 @@ class Tax_Meta_Class {
 			// this saves the add fields
 			add_action('created_'.$page,array( &$this, 'save' ), 10, 2);
 		}
+		// Delete all attachments when delete custom post type.
+		add_action( 'wp_ajax_at_delete_file', 		array( &$this, 'delete_file' ) );
+		add_action( 'wp_ajax_at_reorder_images', 	array( &$this, 'reorder_images' ) );
+		// Delete file via Ajax
+		add_action( 'wp_ajax_at_delete_mupload', array( $this, 'wp_ajax_delete_image' ) );
 		
 	}
 	
@@ -832,8 +843,6 @@ class Tax_Meta_Class {
 	 */
 	public function show_field_file( $field, $meta ) {
 		
-		global $post;
-
 		if ( ! is_array( $meta ) )
 			$meta = (array) $meta;
 
@@ -841,26 +850,26 @@ class Tax_Meta_Class {
 			echo "{$field['desc']}<br />";
 
 			if ( ! empty( $meta ) ) {
-				$nonce = wp_create_nonce( 'at_ajax_delete' );
+				$nonce = wp_create_nonce( 'at_ajax_delete_file' );
 				echo '<div style="margin-bottom: 10px"><strong>' . __('Uploaded files') . '</strong></div>';
 				echo '<ol class="at-upload">';
 				foreach ( $meta as $att ) {
 					// if (wp_attachment_is_image($att)) continue; // what's image uploader for?
-					echo "<li>" . wp_get_attachment_link( $att, '' , false, false, ' ' ) . " (<a class='at-delete-file' href='#' rel='{$nonce}|{$post->ID}|{$field['id']}|{$att}'>" . __( 'Delete' ) . "</a>)</li>";
+					echo "<li>" . wp_get_attachment_link( $att, '' , false, false, ' ' ) . " (<a class='at-delete-file' href='#' rel='{$nonce}||{$field['id']}|{$att}'>" . __( 'Delete' ) . "</a>)</li>";
 				}
 				echo '</ol>';
 			}
 
 			// show form upload
-			echo "<div class='at-file-upload-label'>";
-				echo "<strong>" . __( 'Upload new files' ) . "</strong>";
-			echo "</div>";
-			echo "<div class='new-files'>";
-				echo "<div class='file-input'>";
-					echo "<input type='file' name='{$field['id']}[]' />";
-				echo "</div><!-- End .file-input -->";
-				echo "<a class='at-add-file button' href='#'>" . __( 'Add more files' ) . "</a>";
-			echo "</div><!-- End .new-files -->";
+		echo "<div class='at-file-upload-label'> \n
+			<strong>" . __( 'Upload new files' ) . "</strong>\n
+		</div>\n";
+		echo "<div class='new-files'>\n
+			<div class='file-input'>\n
+				<input type='file' name='{$field['id']}[]' />\n
+			</div><!-- End .file-input -->\n
+			<a class='at-add-file button' href='#'>" . __( 'Add more files' ) . "</a>\n
+			</div><!-- End .new-files -->\n";
 		echo "</td>";
 		$this->show_field_end( $field, $meta );
 	}
@@ -1192,13 +1201,16 @@ class Tax_Meta_Class {
 	 * @access public
 	 */
 	public function save_field_file( $term_id, $field, $old, $new ) {
-	
+
 		$name = $field['id'];
-		if ( empty( $_FILES[$name] ) ) 
+		if ( empty( $_FILES[$name] ) ){
+			$this->delete_tax_meta($term_id,$name);
 			return;
+		}
+		$temp = array();
 		$this->fix_file_array( $_FILES[$name] );
 		foreach ( $_FILES[$name] as $position => $fileitem ) {
-			
+
 			$file = wp_handle_upload( $fileitem, array( 'test_form' => false ) );
 			if ( empty( $file['file'] ) ) 
 				continue;
@@ -1211,18 +1223,16 @@ class Tax_Meta_Class {
 				'post_title' => preg_replace('/\.[^.]+$/', '', basename( $filename ) ),
 				'post_content' => ''
 			);
-			
-			$id = wp_insert_attachment( $attachment, $filename, $term_id );
-			
+
+			$id = wp_insert_attachment( $attachment, $filename);
+
 			if ( ! is_wp_error( $id ) ) {
-				
 				wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $filename ) );
-				add_post_meta( $term_id, $name, $id, false );	// save file's url in meta fields
-			
+		        $temp[] = $id;	// save file's url in meta fields
 			} // End if
-			
 		} // End foreach
-		
+		if (count($temp) > 0)
+		$this->update_tax_meta( $term_id, $name, $temp);
 	}
 	
 	/**

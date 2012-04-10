@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.7
+ * @version 1.7.1
  * @copyright 2012 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -1910,7 +1910,7 @@ endif; // End Check Class Exists
 			$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
 			$m = get_option( 'tax_meta_'.$t_id);	
 			if (isset($m[$key])){
-				return is_array($m[$key])? $m[$key] : (stripslashes($m[$key]);
+				return is_array($m[$key])? $m[$key] : stripslashes($m[$key]);
 			}else{
 				return '';
 			}

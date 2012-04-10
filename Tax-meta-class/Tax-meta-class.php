@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.6
+ * @version 1.7
  * @copyright 2012 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -496,7 +496,7 @@ class Tax_Meta_Class {
 			
 			echo '<tr class="form-field">';
 			// Call Separated methods for displaying each type of field.
-			call_user_func ( array( &$this, 'show_field_' . $field['type'] ), $field, $meta );
+			call_user_func ( array( &$this, 'show_field_' . $field['type'] ), $field, is_array($meta)? $meta : stripslashes($meta) );
 			echo '</tr>';
 		}
 		echo '</table>';
@@ -534,12 +534,13 @@ class Tax_Meta_Class {
 					$m = ( $m !== '' ) ? $m : $f['std'];
 					if ('image' != $f['type'] && $f['type'] != 'repeater')
 						$m = is_array( $m) ? array_map( 'esc_attr', $m ) : esc_attr( $m);
+
 					//set new id for field in array format
 					$f['id'] = $id;
 					if (!$field['inline']){
 						echo '<tr>';
 					} 
-					call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, $m);
+					call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m));
 					if (!$field['inline']){
 						echo '</tr>';
 					} 
@@ -1723,8 +1724,8 @@ class Tax_Meta_Class {
 	 *  @param $id string  field id, i.e. the meta key
 	 *  @param $options mixed|array options of taxonomy field
 	 *  	'taxonomy' =>    // taxonomy name can be category,post_tag or any custom taxonomy default is category
-			'type' =>  // how to show taxonomy? 'select' (default) or 'checkbox_list'
-			'args' =>  // arguments to query taxonomy, see http://goo.gl/uAANN default ('hide_empty' => false)  
+	 *   	'type' =>  // how to show taxonomy? 'select' (default) or 'checkbox_list'
+	 *		'args' =>  // arguments to query taxonomy, see http://goo.gl/uAANN default ('hide_empty' => false)  
 	 *  @param $args mixed|array
 	 *  	'name' => // field name/label string optional
 	 *  	'desc' => // field description, string optional
@@ -1755,8 +1756,8 @@ class Tax_Meta_Class {
 	 *  @param $id string  field id, i.e. the meta key
 	 *  @param $options mixed|array options of taxonomy field
 	 *  	'post_type' =>    // post type name, 'post' (default) 'page' or any custom post type
-			'type' =>  // how to show posts? 'select' (default) or 'checkbox_list'
-			'args' =>  // arguments to query posts, see http://goo.gl/is0yK default ('posts_per_page' => -1)  
+	 *		'type' =>  // how to show posts? 'select' (default) or 'checkbox_list'
+	 *		'args' =>  // arguments to query posts, see http://goo.gl/is0yK default ('posts_per_page' => -1)  
 	 *  @param $args mixed|array
 	 *  	'name' => // field name/label string optional
 	 *  	'desc' => // field description, string optional
@@ -1882,7 +1883,7 @@ endif; // End Check Class Exists
 			}
 		}
 	}
-	
+
 	//delete meta
 	if (!function_exists('delete_tax_meta')){
 		function delete_tax_meta($term_id,$key){
@@ -1900,5 +1901,18 @@ endif; // End Check Class Exists
 			$m = get_option( 'tax_meta_'.$term_id);
 			$m[$key] = $value;
 			update_option('tax_meta_'.$term_id,$m);
+		}
+	}
+
+	//get term meta field and strip slashes
+	if (!function_exists('get_tax_meta_strip')){
+		function get_tax_meta_strip($term_id,$key,$multi = false){
+			$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+			$m = get_option( 'tax_meta_'.$t_id);	
+			if (isset($m[$key])){
+				return is_array($m[$key])? $m[$key] : (stripslashes($m[$key]);
+			}else{
+				return '';
+			}
 		}
 	}

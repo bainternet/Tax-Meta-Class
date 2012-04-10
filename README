@@ -21,6 +21,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+= 1.6 =
+Fixed file field issues.
+
 = 1.5 =
 Fixed repeater delete meta bug
 

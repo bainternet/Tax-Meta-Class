@@ -3,7 +3,7 @@
 Plugin Name: Demo Tax meta class
 Plugin URI: http://en.bainternet.info
 Description: Tax meta class usage demo
-Version: 1.5
+Version: 1.6
 Author: Bainternet, Ohad Raz
 Author URI: http://en.bainternet.info
 */
@@ -13,9 +13,6 @@ require_once("Tax-meta-class/Tax-meta-class.php");
 if (is_admin()){
 	/* 
 	 * prefix of meta keys, optional
-	 * use underscore (_) at the beginning to make keys hidden, for example $prefix = '_ba_';
-	 *  you also can make prefix empty to disable it
-	 * 
 	 */
 	$prefix = 'ba_';
 	/* 

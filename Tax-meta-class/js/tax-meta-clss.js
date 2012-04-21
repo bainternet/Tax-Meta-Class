@@ -323,32 +323,42 @@ jQuery(document).ready(function($) {
 	
 
 	//upload button
-		var formfield1;
-		var formfield2;
-		jQuery('.at-upload_image_button').live('click',function(e){
-			formfield1 = jQuery(this).prev();
-			formfield2 = jQuery(this).prev().prev();			
-			tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
-			//store old send to editor function
-			window.restore_send_to_editor = window.send_to_editor;
-			//overwrite send to editor function
-			window.send_to_editor = function(html) {
-				imgurl = jQuery('img',html).attr('src');
-				img_calsses = jQuery('img',html).attr('class').split(" ");
-				att_id = '';
-				jQuery.each(img_calsses,function(i,val){
-					if (val.indexOf("wp-image") != -1){
-						att_id = val.replace('wp-image-', "");
-					}
-				});
+	var formfield1;
+	var formfield2;
+	jQuery('.at-upload_image_button').live('click',function(e){
+		formfield1 = jQuery(this).prev();
+		formfield2 = jQuery(this).prev().prev();			
+		tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
+		//store old send to editor function
+		window.restore_send_to_editor = window.send_to_editor;
+		//overwrite send to editor function
+		window.send_to_editor = function(html) {
+			imgurl = jQuery('img',html).attr('src');
+			img_calsses = jQuery('img',html).attr('class').split(" ");
+			att_id = '';
+			jQuery.each(img_calsses,function(i,val){
+				if (val.indexOf("wp-image") != -1){
+					att_id = val.replace('wp-image-', "");
+				}
+			});
 
-				jQuery(formfield2).val(att_id);
-				jQuery(formfield1).val(imgurl);
-				load_images_muploader();
-				tb_remove();
-				//restore old send to editor function
-				window.send_to_editor = window.restore_send_to_editor;
-			}
-			return false;
-		});
+			jQuery(formfield2).val(att_id);
+			jQuery(formfield1).val(imgurl);
+			load_images_muploader();
+			tb_remove();
+			//restore old send to editor function
+			window.send_to_editor = window.restore_send_to_editor;
+		}
+		return false;
+	});
+
+	//fix issue #2
+	jQuery("#submit").bind("click",function(){
+   		//remove image
+   		jQuery(".mupload_img_holder").find("img").remove();
+   		jQuery(".mupload_img_holder").next().next().next().removeClass('at-delete_image_button').addClass('at-upload_image_button');
+   		jQuery(".mupload_img_holder").next().next().next().val("Upload Image");
+   		jQuery(".mupload_img_holder").next().next().val('');
+   		jQuery(".mupload_img_holder").next().val('');
+	});
 });

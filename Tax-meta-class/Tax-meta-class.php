@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.7.3
+ * @version 1.7.4
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -462,6 +462,7 @@ class Tax_Meta_Class {
    */
   public function show_new_form($term_id){
     $this->_form_type = 'new';
+    add_action('admin_footer',array($this,'footer_js'));
     $this->show($term_id);
   }
   
@@ -1863,6 +1864,31 @@ class Tax_Meta_Class {
     update_option('tax_meta_'.$term_id,$m);
   }
   
+  /**
+   * footer_js 
+   *  fix issue #2
+   *  @author Ohad Raz
+   *  @since 1.7.4
+   *  @access public
+   *  @return Void
+   */
+  public function footer_js(){
+    ?>
+    <SCRIPT TYPE="text/javascript">
+    //fix issue #2
+    jQuery(document).ready(function(){
+      jQuery("#submit").bind("click",function(){
+          //remove image
+          jQuery(".mupload_img_holder").find("img").remove();
+          jQuery(".mupload_img_holder").next().next().next().removeClass('at-delete_image_button').addClass('at-upload_image_button');
+          jQuery(".mupload_img_holder").next().next().next().val("Upload Image");
+          jQuery(".mupload_img_holder").next().next().val('');
+          jQuery(".mupload_img_holder").next().val('');
+      });
+    });
+    </SCRIPT>
+    <?php
+  }
   
 } // End Class
 

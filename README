@@ -21,6 +21,13 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+= 1.8 = 
+fixed issue 12
+fixed issue 13
+fixed issue 14
+fixed issue 15
+changed "insert into post" on media uploader.
+
 = 1.7.4 = 
 Fixed bug caused by issue 2 fix.
 

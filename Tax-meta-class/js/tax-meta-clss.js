@@ -5,6 +5,9 @@
  *
  * Copyright 2012 Ohad Raz (admin@bainternet.info)
  * @since 1.0
+ * 
+ * @package Tax Meta Class
+ * 
  */
 
 var $ =jQuery.noConflict();
@@ -110,7 +113,7 @@ function update_repeater_fields(){
     $('.at-upload-button').click( function() {
       
       var data = $(this).attr('rel').split('|'),
-        post_id   = data[0],
+        post_id   = 0,
         field_id   = data[1],
         backup     = window.send_to_editor; // backup the original 'send_to_editor' function which adds images to the editor
           
@@ -126,7 +129,7 @@ function update_repeater_fields(){
       };
   
       // note that we pass the field_id and post_id here
-      tb_show('', 'media-upload.php?post_id=' + post_id + '&field_id=' + field_id + '&type=image&TB_iframe=true');
+      tb_show('', 'media-upload.php?post_id=0' + '&field_id=' + field_id + '&type=image&TB_iframe=true&tax_meta_c=instopo');
   
       return false;
     });
@@ -240,7 +243,7 @@ jQuery(document).ready(function($) {
   $('.at-upload-button').click( function() {
     
     var data       = $(this).attr('rel').split('|'),
-        post_id   = data[0],
+        post_id   = 0,
         field_id   = data[1],
         backup     = window.send_to_editor; // backup the original 'send_to_editor' function which adds images to the editor
         
@@ -256,7 +259,7 @@ jQuery(document).ready(function($) {
     };
 
     // note that we pass the field_id and post_id here
-    tb_show('', 'media-upload.php?post_id=' + post_id + '&field_id=' + field_id + '&type=image&TB_iframe=true');
+    tb_show('', 'media-upload.php?post_id=0' + '&field_id=' + field_id + '&type=image&TB_iframe=true&tax_meta_c=instopo');
 
     return false;
   });
@@ -328,7 +331,7 @@ jQuery(document).ready(function($) {
   jQuery('.at-upload_image_button').live('click',function(e){
     formfield1 = jQuery(this).prev();
     formfield2 = jQuery(this).prev().prev();      
-    tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');
+    tb_show('', 'media-upload.php?post_id=0&type=image&amp;TB_iframe=true&tax_meta_c=instopo');
     //store old send to editor function
     window.restore_send_to_editor = window.send_to_editor;
     //overwrite send to editor function

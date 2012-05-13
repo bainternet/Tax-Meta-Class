@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.7.4
+ * @version 1.8
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -128,8 +128,30 @@ class Tax_Meta_Class {
     // Load common js, css files
     // Must enqueue for all pages as we need js for the media upload, too.
     add_action( 'admin_print_styles', array( &$this, 'load_scripts_styles' ) );
+
+    //overwrite insert into post button
+    add_filter("attribute_escape",array($this, "replace_insert_to_post_text"), 10, 2);
     
   }
+
+  /**
+   * Replace "insert into Post" button text
+   * 
+   * @author Ohad Raz <admin@bainternet.info>
+   * @access public
+   * @since 1.8
+   * 
+   * @param  string $safe_text [description]
+   * @param  string $text      [description]
+   * 
+   * @return string
+   */
+  public function replace_insert_to_post_text($safe_text, $text) {
+    if (isset($_REQUEST['post_id']) && $_REQUEST['post_id'] == '0')
+      return str_replace(__('Insert into Post'), __('Use this image'), $text);
+    return $text;
+  }
+
   
   /**
    * Load all Javascript and CSS
@@ -531,7 +553,7 @@ class Tax_Meta_Class {
           //reset var $id for repeater
           $id = '';
           $id = $field['id'].'['.$c.']['.$f['id'].']';
-          $m = $me[$f['id']];
+          $m = isset($me[$f['id']])? $me[$f['id']]: '';
           $m = ( $m !== '' ) ? $m : $f['std'];
           if ('image' != $f['type'] && $f['type'] != 'repeater')
             $m = is_array( $m) ? array_map( 'esc_attr', $m ) : esc_attr( $m);
@@ -1287,7 +1309,7 @@ class Tax_Meta_Class {
   public function add_missed_values() {
     
     // Default values for meta box
-    $this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ), $this->_meta_box );
+    $this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ),(array)$this->_meta_box );
 
     // Default values for fields
     foreach ( $this->_fields as &$field ) {
@@ -1876,15 +1898,35 @@ class Tax_Meta_Class {
     ?>
     <SCRIPT TYPE="text/javascript">
     //fix issue #2
+    var numberOfRows = 0;
     jQuery(document).ready(function(){
-      jQuery("#submit").bind("click",function(){
+      numberOfRows = jQuery("#the-list>tr").length;
+      jQuery("#the-list").bind("DOMSubtreeModified", function() {
+          if(jQuery("#the-list>tr").length !== numberOfRows){
+              //update new count
+              numberOfRows = jQuery("#the-list>tr").length;
+              //clear form 
+              clear_form_meta();
+          }
+      });
+      function clear_form_meta(){
           //remove image
           jQuery(".mupload_img_holder").find("img").remove();
           jQuery(".mupload_img_holder").next().next().next().removeClass('at-delete_image_button').addClass('at-upload_image_button');
           jQuery(".mupload_img_holder").next().next().next().val("Upload Image");
           jQuery(".mupload_img_holder").next().next().val('');
           jQuery(".mupload_img_holder").next().val('');
-      });
+
+          //clear selections
+          jQuery("#addtag select option").removeProp('selected');
+          //clear checkbox
+          jQuery("#addtag input:checkbox").removeAttr('checked');
+          //clear radio buttons
+          jQuery("#addtag input:radio").prop('checked', false);
+          //remove repeater blocks
+          jQuery(".at-repater-block").remove();
+
+      }
     });
     </SCRIPT>
     <?php

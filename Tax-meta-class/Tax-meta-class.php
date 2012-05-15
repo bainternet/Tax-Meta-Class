@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.8
+ * @version 1.8.1
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -131,7 +131,8 @@ class Tax_Meta_Class {
 
     //overwrite insert into post button
     add_filter("attribute_escape",array($this, "replace_insert_to_post_text"), 10, 2);
-    
+    //delete term meta on term deletion
+    add_action('delete_term', array($this,'delete_taxonomy_metadata'), 10,2);
   }
 
   /**
@@ -1885,6 +1886,23 @@ class Tax_Meta_Class {
     $m[$key] = $value;
     update_option('tax_meta_'.$term_id,$m);
   }
+  
+
+  /**
+   * deletetaxonomy_metadata
+   * 
+   * delete meta on term deletion
+   *
+   *  answers issue #16
+   *  @author Ohad Raz
+   *  @since 1.8.1
+   *  @access public
+   *  @return Void
+   */
+  public function deletetaxonomy_metadata($term,$term_id) {
+    delete_option( 'tax_meta_'.$term_id );
+  }
+
   
   /**
    * footer_js 

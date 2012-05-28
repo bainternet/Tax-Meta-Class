@@ -1,0 +1,41 @@
+#media-upload-header #sidemenu li#tab-type_url,
+#media-upload-header #sidemenu li#tab-gallery, 
+#media-items .media-item table.slidetoggle,
+#media-items .media-item a.toggle {
+  display: none !important;
+}
+
+#media-items .media-item {
+  min-height: 68px;
+}
+
+#media-items .media-item .acf-checkbox {
+  float: left;
+  margin: 28px 10px 0;
+}
+
+#media-items .media-item .pinkynail {
+  max-width: 64px;
+  max-height: 64px;
+  display: block !important;
+}
+
+#media-items .media-item .filename.new {
+  min-height: 0;
+  padding: 25px 10px 10px;
+  line-height: 14px;
+  
+}
+
+#media-items .media-item .title {
+  line-height: 14px;
+}
+
+#media-items .media-item .button {
+  float: right;
+  margin: -2px 0 0 10px;
+}
+
+#media-upload .ml-submit {
+  display: none !important;
+}

@@ -21,6 +21,10 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+= 1.8.3 =
+Cleaned up Media uploader to simplify things. [parisholley](https://github.com/parisholley)
+Change the replacement of "INSERT TO POST" and is now done on client side.
+
 = 1.8.2 =
 Replaced get_stylesheet_directory_uri with get_template_directory_uri to work better with child themes.
 Once again thanks to oobi. issue 17

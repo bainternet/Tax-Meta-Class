@@ -105,37 +105,6 @@ function update_repeater_fields(){
       
     });
     
-    /**
-     * Thickbox Upload
-     *
-     * @since 1.0
-     */
-    $('.at-upload-button').click( function() {
-      
-      var data = $(this).attr('rel').split('|'),
-        post_id   = 0,
-        field_id   = data[1],
-        backup     = window.send_to_editor; // backup the original 'send_to_editor' function which adds images to the editor
-          
-      // change the function to make it adds images to our section of uploaded images
-      window.send_to_editor = function(html) {
-        
-        $('#at-images-' + field_id).append( $(html) );
-  
-        tb_remove();
-        
-        window.send_to_editor = backup;
-      
-      };
-  
-      // note that we pass the field_id and post_id here
-      tb_show('', 'media-upload.php?post_id=0' + '&field_id=' + field_id + '&type=image&TB_iframe=true&tax_meta_c=instopo');
-  
-      return false;
-    });
-  
-    
-  
   }
 jQuery(document).ready(function($) {
 
@@ -236,36 +205,6 @@ jQuery(document).ready(function($) {
 
     
   /**
-   * Thickbox Upload
-   *
-   * @since 1.0
-   */
-  $('.at-upload-button').click( function() {
-    
-    var data       = $(this).attr('rel').split('|'),
-        post_id   = 0,
-        field_id   = data[1],
-        backup     = window.send_to_editor; // backup the original 'send_to_editor' function which adds images to the editor
-        
-    // change the function to make it adds images to our section of uploaded images
-    window.send_to_editor = function(html) {
-      
-      $('#at-images-' + field_id).append( $(html) );
-
-      tb_remove();
-      
-      window.send_to_editor = backup;
-    
-    };
-
-    // note that we pass the field_id and post_id here
-    tb_show('', 'media-upload.php?post_id=0' + '&field_id=' + field_id + '&type=image&TB_iframe=true&tax_meta_c=instopo');
-
-    return false;
-  });
-
-    
-  /**
    * Helper Function
    *
    * Get Query string value by name.
@@ -332,6 +271,21 @@ jQuery(document).ready(function($) {
     formfield1 = jQuery(this).prev();
     formfield2 = jQuery(this).prev().prev();      
     tb_show('', 'media-upload.php?post_id=0&type=image&amp;TB_iframe=true&tax_meta_c=instopo');
+
+    //cleanup the meadi uploader
+    tbframe_interval = setInterval(function() {
+
+       //remove url, alignment and size fields- auto set to null, none and full respectively                        
+       $('#TB_iframeContent').contents().find('.url').hide();
+       $('#TB_iframeContent').contents().find('.align').hide();
+       $('#TB_iframeContent').contents().find('.image_alt').hide();
+       $('#TB_iframeContent').contents().find('.post_excerpt').hide();
+       $('#TB_iframeContent').contents().find('.post_content').hide();
+       $('#TB_iframeContent').contents().find('.image-size').hide();
+       $('#TB_iframeContent').contents().find('[value="Insert into Post"]').val('Use this image');
+
+    }, 2000);
+
     //store old send to editor function
     window.restore_send_to_editor = window.send_to_editor;
     //overwrite send to editor function

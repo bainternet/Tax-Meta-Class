@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.8.2
+ * @version 1.8.3
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -24,6 +24,7 @@
  * THE SOFTWARE.
  *
  * @package Tax Meta Class
+ * @deprecated replace_insert_to_post_text() @since 1.8.3
  */
 
 if ( ! class_exists( 'Tax_Meta_Class') ) :
@@ -130,30 +131,11 @@ class Tax_Meta_Class {
     add_action( 'admin_print_styles', array( &$this, 'load_scripts_styles' ) );
 
     //overwrite insert into post button
-    add_filter("attribute_escape",array($this, "replace_insert_to_post_text"), 10, 2);
+    
     //delete term meta on term deletion
     add_action('delete_term', array($this,'delete_taxonomy_metadata'), 10,2);
   }
 
-  /**
-   * Replace "insert into Post" button text
-   * 
-   * @author Ohad Raz <admin@bainternet.info>
-   * @access public
-   * @since 1.8
-   * 
-   * @param  string $safe_text [description]
-   * @param  string $text      [description]
-   * 
-   * @return string
-   */
-  public function replace_insert_to_post_text($safe_text, $text) {
-    if (isset($_REQUEST['post_id']) && $_REQUEST['post_id'] == '0')
-      return str_replace(__('Insert into Post'), __('Use this image'), $text);
-    return $text;
-  }
-
-  
   /**
    * Load all Javascript and CSS
    *

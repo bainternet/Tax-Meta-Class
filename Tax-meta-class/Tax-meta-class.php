@@ -132,7 +132,7 @@ class Tax_Meta_Class {
     //overwrite insert into post button
     add_filter("attribute_escape",array($this, "replace_insert_to_post_text"), 10, 2);
     //delete term meta on term deletion
-    add_action('delete_term', array($this,'delete_taxonomy_metadata'), 10,2);
+    add_action('delete_term', array($this,'delete_tax_meta'), 10,2);
   }
 
   /**

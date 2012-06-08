@@ -21,6 +21,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+= 1.8.4 =
+Renamed delete_taxonomy_metadata function to delete term meta on term deletion. pull #20.
+
 = 1.8.3 =
 Cleaned up Media uploader to simplify things. (parisholley)[https://github.com/parisholley]
 Change the replacement of "INSERT TO POST" and is now done on client side.

@@ -134,7 +134,7 @@ class Tax_Meta_Class {
     //overwrite insert into post button
     
     //delete term meta on term deletion
-    add_action('delete_term', array($this,'delete_taxonomy_metadata'), 10,2);
+    add_action('delete_term', array($this,'delete_tax_meta'), 10,2);
   }
 
   /**

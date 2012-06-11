@@ -21,6 +21,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+= 1.8.5 = 
+fixed issue #21.
+
 = 1.8.4 =
 Renamed delete_taxonomy_metadata function to delete term meta on term deletion. pull #20.
 

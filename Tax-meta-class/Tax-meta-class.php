@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.8.4
+ * @version 1.8.5
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -109,20 +109,18 @@ class Tax_Meta_Class {
     $this->_fields = &$this->_meta_box['fields'];
     $this->_Local_images = (isset($meta_box['local_images'])) ? true : false;
     $this->add_missed_values();
-    if (isset($meta_box['use_with_theme']))
-      if ($meta_box['use_with_theme'] == true){
+    if (isset($meta_box['use_with_theme'])){
+      if ($meta_box['use_with_theme'] === true){
         $this->SelfPath = get_template_directory_uri() . '/Tax-meta-class';
-      }elseif($meta_box['use_with_theme'] == false){
+      }elseif($meta_box['use_with_theme'] === false){
         $this->SelfPath = plugins_url( 'Tax-meta-class', plugin_basename( dirname( __FILE__ ) ) );
       }else{
         $this->SelfPath = $meta_box['use_with_theme'];
       }
-    else{
+    }else{
       $this->SelfPath = plugins_url( 'Tax-meta-class', plugin_basename( dirname( __FILE__ ) ) );
     }
     
-    
-      
     
     // Add Actions
     add_action( 'admin_init', array( &$this, 'add' ) );

@@ -714,7 +714,7 @@ class Tax_Meta_Class {
    */
   public function show_field_text( $field, $meta) {  
     $this->show_field_begin( $field, $meta );
-    echo "<input type='text' class='at-text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' size='30' />";
+    echo "<input type='text' class='at-text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' style='{$field['style']}' size='30' />";
     $this->show_field_end( $field, $meta );
   }
   
@@ -741,7 +741,7 @@ class Tax_Meta_Class {
    */
   public function show_field_paragraph( $field) {  
     //$this->show_field_begin( $field, $meta );
-    echo '<p>'.$field['value'].'</p>';
+    echo "<p style='{$field['style']}'>".$field['value']."</p>";
     //$this->show_field_end( $field, $meta );
   }
     
@@ -755,7 +755,7 @@ class Tax_Meta_Class {
    */
   public function show_field_textarea( $field, $meta ) {
     $this->show_field_begin( $field, $meta );
-      echo "<textarea class='at-textarea large-text' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
+      echo "<textarea class='at-textarea large-text' style='{$field['style']}' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
     $this->show_field_end( $field, $meta );
   }
   
@@ -773,7 +773,7 @@ class Tax_Meta_Class {
       $meta = (array) $meta;
       
     $this->show_field_begin( $field, $meta );
-      echo "<select class='at-select' name='{$field['id']}" . ( $field['multiple'] ? "[]' id='{$field['id']}' multiple='multiple'" : "'" ) . ">";
+      echo "<select class='at-select' style='{$field['style']}' name='{$field['id']}" . ( $field['multiple'] ? "[]' id='{$field['id']}' multiple='multiple'" : "'" ) . ">";
       foreach ( $field['options'] as $key => $value ) {
         echo "<option value='{$key}'" . selected( in_array( $key, $meta ), true, false ) . ">{$value}</option>";
       }
@@ -797,7 +797,7 @@ class Tax_Meta_Class {
       
     $this->show_field_begin( $field, $meta );
       foreach ( $field['options'] as $key => $value ) {
-        echo "<input type='radio' class='at-radio' name='{$field['id']}' value='{$key}'" . checked( in_array( $key, $meta ), true, false ) . " /> <span class='at-radio-label'>{$value}</span>";
+        echo "<input style='{$field['style']}' type='radio' class='at-radio' name='{$field['id']}' value='{$key}'" . checked( in_array( $key, $meta ), true, false ) . " /> <span class='at-radio-label'>{$value}</span>";
       }
     $this->show_field_end( $field, $meta );
   }
@@ -813,7 +813,7 @@ class Tax_Meta_Class {
   public function show_field_checkbox( $field, $meta ) {
   
     $this->show_field_begin($field, $meta);
-    echo "<input type='checkbox' class='rw-checkbox' name='{$field['id']}' id='{$field['id']}'" . checked(!empty($meta), true, false) . " /> {$field['desc']}";
+    echo "<input type='checkbox' style='{$field['style']}' class='rw-checkbox' name='{$field['id']}' id='{$field['id']}'" . checked(!empty($meta), true, false) . " /> {$field['desc']}";
     $this->show_field_end( $field, $meta );
   }
   
@@ -831,7 +831,7 @@ class Tax_Meta_Class {
     global $wp_version;
 
     if ( version_compare( $wp_version, '3.2.1' ) < 1 ) {
-      echo "<textarea class='at-wysiwyg theEditor large-text' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
+      echo "<textarea style='{$field['style']}' class='at-wysiwyg theEditor large-text' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
     }else{
       // Use new wp_editor() since WP 3.3
       wp_editor( stripslashes(html_entity_decode($meta)), $field['id'], array( 'editor_class' => 'at-wysiwyg' ) );
@@ -950,7 +950,7 @@ class Tax_Meta_Class {
       $html = array();
     
       foreach ($field['options'] as $key => $value) {
-        $html[] = "<input type='checkbox' class='at-checkbox_list' name='{$field['id']}[]' value='{$key}'" . checked( in_array( $key, $meta ), true, false ) . " /> {$value}";
+        $html[] = "<input style='{$field['style']}' type='checkbox' class='at-checkbox_list' name='{$field['id']}[]' value='{$key}'" . checked( in_array( $key, $meta ), true, false ) . " /> {$value}";
       }
     
       echo implode( '<br />' , $html );
@@ -969,7 +969,7 @@ class Tax_Meta_Class {
    */
   public function show_field_date( $field, $meta ) {
     $this->show_field_begin( $field, $meta );
-      echo "<input type='text' class='at-date' name='{$field['id']}' id='{$field['id']}' rel='{$field['format']}' value='{$meta}' size='30' />";
+      echo "<input style='{$field['style']}' type='text' class='at-date' name='{$field['id']}' id='{$field['id']}' rel='{$field['format']}' value='{$meta}' size='30' />";
     $this->show_field_end( $field, $meta );
   }
   
@@ -983,7 +983,7 @@ class Tax_Meta_Class {
    */
   public function show_field_time( $field, $meta ) {
     $this->show_field_begin( $field, $meta );
-      echo "<input type='text' class='at-time' name='{$field['id']}' id='{$field['id']}' rel='{$field['format']}' value='{$meta}' size='30' />";
+      echo "<input style='{$field['style']}' type='text' class='at-time' name='{$field['id']}' id='{$field['id']}' rel='{$field['format']}' value='{$meta}' size='30' />";
     $this->show_field_end( $field, $meta );
   }
   
@@ -1450,7 +1450,7 @@ class Tax_Meta_Class {
    *  @param $repeater bool  is this a field inside a repeatr? true|false(default) 
    */
   public function addParagraph($id,$args,$repeater=false){
-    $new_field = array('type' => 'paragraph','id'=> $id,'value' => '');
+    $new_field = array('type' => 'paragraph','id'=> $id,'value' => '','style' =>'');
     $new_field = array_merge($new_field, $args);
     if(false === $repeater){
       $this->_fields[] = $new_field;
@@ -1598,7 +1598,7 @@ class Tax_Meta_Class {
    *  @param $repeater bool  is this a field inside a repeatr? true|false(default) 
    */
   public function addDate($id,$args,$repeater=false){
-    $new_field = array('type' => 'date','id'=> $id,'std' => '','desc' => '','format'=>'d MM, yy','name' => 'Date Field');
+    $new_field = array('type' => 'date','id'=> $id,'style' =>'','std' => '','desc' => '','format'=>'d MM, yy','name' => 'Date Field');
     $new_field = array_merge($new_field, $args);
     if(false === $repeater){
       $this->_fields[] = $new_field;
@@ -1622,7 +1622,7 @@ class Tax_Meta_Class {
    *  @param $repeater bool  is this a field inside a repeatr? true|false(default) 
    */
   public function addTime($id,$args,$repeater=false){
-    $new_field = array('type' => 'time','id'=> $id,'std' => '','desc' => '','format'=>'hh:mm','name' => 'Time Field');
+    $new_field = array('type' => 'time','id'=> $id,'std' => '','style' =>'','desc' => '','format'=>'hh:mm','name' => 'Time Field');
     $new_field = array_merge($new_field, $args);
     if(false === $repeater){
       $this->_fields[] = $new_field;
@@ -1645,7 +1645,7 @@ class Tax_Meta_Class {
    *  @param $repeater bool  is this a field inside a repeatr? true|false(default) 
    */
   public function addColor($id,$args,$repeater=false){
-    $new_field = array('type' => 'color','id'=> $id,'std' => '','desc' => '','name' => 'ColorPicker Field');
+    $new_field = array('type' => 'color','id'=> $id,'std' => '','style' =>'','desc' => '','name' => 'ColorPicker Field');
     $new_field = array_merge($new_field, $args);
     if(false === $repeater){
       $this->_fields[] = $new_field;
@@ -1667,7 +1667,7 @@ class Tax_Meta_Class {
    *  @param $repeater bool  is this a field inside a repeatr? true|false(default) 
    */
   public function addImage($id,$args,$repeater=false){
-    $new_field = array('type' => 'image','id'=> $id,'desc' => '','name' => 'Image Field');
+    $new_field = array('type' => 'image','id'=> $id,'desc' => '','style' =>'','name' => 'Image Field');
     $new_field = array_merge($new_field, $args);
     if(false === $repeater){
       $this->_fields[] = $new_field;

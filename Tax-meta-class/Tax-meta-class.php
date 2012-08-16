@@ -1066,9 +1066,9 @@ class Tax_Meta_Class {
    */
   public function save( $term_id ) {
     
-    $taxnow = $_POST['taxonomy'];
     if ( ! isset( $term_id )                            // Check Revision
-    || ( ! in_array( $taxnow, $this->_meta_box['pages'] ) )              // Check if current taxonomy type is supported.
+    || ( ! array_key_exists('taxonomy', $_POST) )       // Check if taxonomy is in post
+    || ( ! in_array( $_POST['taxonomy'], $this->_meta_box['pages'] ) )              // Check if current taxonomy type is supported.
     || ( ! check_admin_referer( basename( __FILE__ ), 'tax_meta_class_nonce') )    // Check nonce - Security
     || ( ! current_user_can('manage_categories') ) )                 // Check permission
     {

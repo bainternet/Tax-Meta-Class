@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.8.6
+ * @version 1.8.7
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -1066,7 +1066,6 @@ class Tax_Meta_Class {
    */
   public function save( $term_id ) {
     
-    $taxnow = ;
     if ( ! isset( $term_id )                            // Check Revision
     || ( ! isset( $_POST['taxonomy'] ) )              // Check if current taxonomy type is set.
     || ( ! in_array( $_POST['taxonomy'], $this->_meta_box['pages'] ) )              // Check if current taxonomy type is supported.
@@ -1295,7 +1294,7 @@ class Tax_Meta_Class {
     $this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ),(array)$this->_meta_box );
 
     // Default values for fields
-    foreach ( $this->_fields as &$field ) {
+    foreach ( (array)$this->_fields as &$field ) {
       
       $multiple = in_array( $field['type'], array( 'checkbox_list', 'file', 'image' ) );
       $std = $multiple ? array() : '';

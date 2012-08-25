@@ -21,6 +21,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+1.9.0
+Added 'multiple' => false to all field types as defualt.
+
 = 1.8.9 =
 fixed issue #27 (again).
 fixed issues #28, #29 , #30.

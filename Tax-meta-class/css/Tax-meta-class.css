@@ -22,7 +22,7 @@
 /* =Form Fields
 ----------------------------------------------- */
 .form-field input, .form-field textarea {width: auto !important;}
-.wp-editor-wrap{{width: 500px;} textarea.at-wysiwyg{width: 498px !important;}
+.wp-editor-wrap{width: 500px;} textarea.at-wysiwyg{width: 498px !important;}
 .rw-checkbox, .at-select, .at-text , .at-textarea{width: auto!important;}
 .postbox .at-field input,
 .postbox .at-field textarea { padding: 5px; line-height: 18px; } 

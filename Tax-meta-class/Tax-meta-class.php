@@ -1294,7 +1294,7 @@ class Tax_Meta_Class {
     $this->_meta_box = array_merge( array( 'context' => 'normal', 'priority' => 'high', 'pages' => array( 'post' ) ),(array)$this->_meta_box );
 
     // Default values for fields
-    foreach ( (array)$this->_fields as &$field ) {
+    foreach ( (array)$this->_fields as $field ) {
       
       $multiple = in_array( $field['type'], array( 'checkbox_list', 'file', 'image' ) );
       $std = $multiple ? array() : '';
@@ -1388,7 +1388,7 @@ class Tax_Meta_Class {
    *  @param $args mixed|array
    */
   public function addField($id,$args){
-    $new_field = array('id'=> $id,'std' => '','desc' => '','style' =>'');
+    $new_field = array('id'=> $id,'std' => '','desc' => '','style' =>'','multiple' => false);
     $new_field = array_merge($new_field, $args);
     $this->_fields[] = $new_field;
   }

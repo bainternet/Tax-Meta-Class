@@ -21,6 +21,11 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+= 1.8.9 =
+fixed issue #27 (again).
+fixed issues #28, #29 , #30.
+
+
 = 1.8.8 =
 fixed issue #27.
 

@@ -3,7 +3,7 @@
 Plugin Name: Demo Tax meta class
 Plugin URI: http://en.bainternet.info
 Description: Tax meta class usage demo
-Version: 1.9.0
+Version: 1.9.1
 Author: Bainternet, Ohad Raz
 Author URI: http://en.bainternet.info
 */

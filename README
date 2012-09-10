@@ -2,7 +2,7 @@ Tax Meta Class
 =======================
 Contributors: bainternet
 Requires at least: 3.1
-Tested up to: 3.3.1
+Tested up to: 3.4.2
 
 Description
 -----------
@@ -21,6 +21,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+1.9.1
+Fixed Upload field issues.
+
 1.9.0
 Added 'multiple' => false to all field types as defualt.
 

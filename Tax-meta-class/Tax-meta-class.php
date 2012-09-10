@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.9.0
+ * @version 1.9.1
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -494,8 +494,9 @@ class Tax_Meta_Class {
     wp_nonce_field( basename(__FILE__), 'tax_meta_class_nonce' );
     
     foreach ( $this->_fields as $field ) {
-      $meta = $this->get_tax_meta( $term_id, $field['id'], !$field['multiple'] );
-      $meta = ( $meta !== '' ) ? $meta : $field['std'];
+    $multiple = isset($field['multiple'])? $field['multiple'] : false;
+      $meta = $this->get_tax_meta( $term_id, $field['id'], !$multiple );
+    $meta = ( $meta !== '' ) ? $meta : (isset($field['std'])? $field['std'] : '');
       if ('image' != $field['type'] && $field['type'] != 'repeater')
         $meta = is_array( $meta ) ? array_map( 'esc_attr', $meta ) : esc_attr( $meta );
       
@@ -680,20 +681,20 @@ class Tax_Meta_Class {
   public function show_field_end( $field, $meta=NULL ,$group = false) {
     if (isset($field['group'])){
       if ($group == 'end'){
-        if ( $field['desc'] != '' ) {
+        if ( isset($field['desc']) && $field['desc'] != '' ) {
           echo "<div class='desc-field'>{$field['desc']}</div></td>";
         } else {
           echo "</td>";
         }
       }else {
-        if ( $field['desc'] != '' ) {
+        if ( isset($field['desc']) && $field['desc'] != '' ) {
           echo "<div class='desc-field'>{$field['desc']}</div><br/>";  
         }else{
           echo '<br/>';
         }  
       }    
     }else{
-      if ( $field['desc'] != '' ) {
+      if ( isset($field['desc']) && $field['desc'] != '' ) {
         echo "<div class='desc-field'>{$field['desc']}</div>";
       }
       if ($this->_form_type == 'edit'){
@@ -855,7 +856,7 @@ class Tax_Meta_Class {
     $this->show_field_begin( $field, $meta );
       echo "{$field['desc']}<br />";
 
-      if ( ! empty( $meta ) ) {
+      if ( !empty( $meta )  && count($meta) > 0 && !$this->is_array_empty($meta) ) {
         $nonce = wp_create_nonce( 'at_ajax_delete_file' );
         echo '<div style="margin-bottom: 10px"><strong>' . __('Uploaded files') . '</strong></div>';
         echo '<ol class="at-upload">';

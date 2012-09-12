@@ -1316,8 +1316,13 @@ class Tax_Meta_Class {
    */
   public function has_field( $type ) {
     foreach ( $this->_fields as $field ) {
-      if ( $type == $field['type'] ) 
+      if ( $type == $field['type'] ) {
         return true;
+      } elseif("repeater" == $field["type"]) {
+	  		 foreach($field["fields"] as $repeater_field)  {
+	  		   if($type == $repeater_field["type"]) return true;      		
+	  		 }
+      }
     }
     return false;
   }

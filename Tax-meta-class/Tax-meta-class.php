@@ -527,7 +527,9 @@ class Tax_Meta_Class {
       if (count($meta) > 0 && is_array($meta) ){
          foreach ($meta as $me){
            //for labling toggles
-           $mmm =  $me[$field['fields'][0]['id']];
+           if($me[$field]) {
+              $mmm =  $me[$field['fields'][0]['id']];           
+           } 
            echo '<div class="at-repater-block">'.$mmm.'<br/><table class="repeater-table" style="display: none;">';
            if ($field['inline']){
              echo '<tr class="at-inline" VALIGN="top">';
@@ -1316,8 +1318,13 @@ class Tax_Meta_Class {
    */
   public function has_field( $type ) {
     foreach ( $this->_fields as $field ) {
-      if ( $type == $field['type'] ) 
+      if ( $type == $field['type'] ) {
         return true;
+      } elseif("repeater" == $field["type"]) {
+	  		 foreach($field["fields"] as $repeater_field)  {
+	  		   if($type == $repeater_field["type"]) return true;      		
+	  		 }
+      }
     }
     return false;
   }

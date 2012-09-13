@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.9.1
+ * @version 1.9.2
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -527,7 +527,7 @@ class Tax_Meta_Class {
       if (count($meta) > 0 && is_array($meta) ){
          foreach ($meta as $me){
            //for labling toggles
-           $mmm =  $me[$field['fields'][0]['id']];
+           $mmm =  ($me[$field])? $me[$field['fields'][0]['id']]: "";
            echo '<div class="at-repater-block">'.$mmm.'<br/><table class="repeater-table" style="display: none;">';
            if ($field['inline']){
              echo '<tr class="at-inline" VALIGN="top">';
@@ -1318,6 +1318,11 @@ class Tax_Meta_Class {
     foreach ( $this->_fields as $field ) {
       if ( $type == $field['type'] ) 
         return true;
+      elseif('repeater' == $field['type'] ){
+        foreach((array)$field["fields"] as $repeater_field)  {
+            if($type == $repeater_field["type"]) return true;
+        }
+      }
     }
     return false;
   }

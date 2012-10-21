@@ -18,9 +18,11 @@ Usage
 Take a look at the `class-usage-demo.php` file which can also be tested as a WordPress Plugin. 
 Other options are available for each field which can be see in the 'Tax-meta-class.php' file, 
 
-
 Changelog
 ---------
+1.9.4
+Added textdomain for l18n #39
+
 1.9.3
 Fixed issue #38 props to Nicola Peluchetti for finding it and giving my an idea of how to fix it.
 

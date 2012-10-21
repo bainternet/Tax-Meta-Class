@@ -3,7 +3,7 @@
 Plugin Name: Demo Tax meta class
 Plugin URI: http://en.bainternet.info
 Description: Tax meta class usage demo
-Version: 1.9.3
+Version: 1.9.4
 Author: Bainternet, Ohad Raz
 Author URI: http://en.bainternet.info
 */
@@ -39,47 +39,47 @@ if (is_admin()){
    */
   
   //text field
-  $my_meta->addText($prefix.'text_field_id',array('name'=> 'My Text '));
+  $my_meta->addText($prefix.'text_field_id',array('name'=> __('My Text ','tax-meta')));
   //textarea field
-  $my_meta->addTextarea($prefix.'textarea_field_id',array('name'=> 'My Textarea '));
+  $my_meta->addTextarea($prefix.'textarea_field_id',array('name'=> __('My Textarea ','tax-meta')));
   //checkbox field
-  $my_meta->addCheckbox($prefix.'checkbox_field_id',array('name'=> 'My Checkbox '));
+  $my_meta->addCheckbox($prefix.'checkbox_field_id',array('name'=> __('My Checkbox ','tax-meta')));
   //select field
-  $my_meta->addSelect($prefix.'select_field_id',array('selectkey1'=>'Select Value1','selectkey2'=>'Select Value2'),array('name'=> 'My select ', 'std'=> array('selectkey2')));
+  $my_meta->addSelect($prefix.'select_field_id',array('selectkey1'=>'Select Value1','selectkey2'=>'Select Value2'),array('name'=> __('My select ','tax-meta'), 'std'=> array('selectkey2')));
   //radio field
-  $my_meta->addRadio($prefix.'radio_field_id',array('radiokey1'=>'Radio Value1','radiokey2'=>'Radio Value2'),array('name'=> 'My Radio Filed', 'std'=> array('radionkey2')));
+  $my_meta->addRadio($prefix.'radio_field_id',array('radiokey1'=>'Radio Value1','radiokey2'=>'Radio Value2'),array('name'=> __('My Radio Filed','tax-meta'), 'std'=> array('radionkey2')));
   //date field
-  $my_meta->addDate($prefix.'date_field_id',array('name'=> 'My Date '));
+  $my_meta->addDate($prefix.'date_field_id',array('name'=> __('My Date ','tax-meta')));
   //Time field
-  $my_meta->addTime($prefix.'time_field_id',array('name'=> 'My Time '));
+  $my_meta->addTime($prefix.'time_field_id',array('name'=> __('My Time ','tax-meta')));
   //Color field
-  $my_meta->addColor($prefix.'color_field_id',array('name'=> 'My Color '));
+  $my_meta->addColor($prefix.'color_field_id',array('name'=> __('My Color ','tax-meta')));
   //Image field
-  $my_meta->addImage($prefix.'image_field_id',array('name'=> 'My Image '));
+  $my_meta->addImage($prefix.'image_field_id',array('name'=> __('My Image ','tax-meta')));
   //file upload field
-  $my_meta->addFile($prefix.'file_field_id',array('name'=> 'My File '));
+  $my_meta->addFile($prefix.'file_field_id',array('name'=> __('My File ','tax-meta')));
   //wysiwyg field
-  $my_meta->addWysiwyg($prefix.'wysiwyg_field_id',array('name'=> 'My wysiwyg Editor '));
+  $my_meta->addWysiwyg($prefix.'wysiwyg_field_id',array('name'=> __('My wysiwyg Editor ','tax-meta')));
   //taxonomy field
-  $my_meta->addTaxonomy($prefix.'taxonomy_field_id',array('taxonomy' => 'category'),array('name'=> 'My Taxonomy '));
+  $my_meta->addTaxonomy($prefix.'taxonomy_field_id',array('taxonomy' => 'category'),array('name'=> __('My Taxonomy ','tax-meta')));
   //posts field
-  $my_meta->addPosts($prefix.'posts_field_id',array('args' => array('post_type' => 'page')),array('name'=> 'My Posts '));
+  $my_meta->addPosts($prefix.'posts_field_id',array('args' => array('post_type' => 'page')),array('name'=> __('My Posts ','tax-meta')));
   
   /*
    * To Create a reapeater Block first create an array of fields
    * use the same functions as above but add true as a last param
    */
   
-  $repeater_fields[] = $my_meta->addText($prefix.'re_text_field_id',array('name'=> 'My Text '),true);
-  $repeater_fields[] = $my_meta->addTextarea($prefix.'re_textarea_field_id',array('name'=> 'My Textarea '),true);
-  $repeater_fields[] = $my_meta->addCheckbox($prefix.'re_checkbox_field_id',array('name'=> 'My Checkbox '),true);
-  $repeater_fields[] = $my_meta->addImage($prefix.'image_field_id',array('name'=> 'My Image '),true);
+  $repeater_fields[] = $my_meta->addText($prefix.'re_text_field_id',array('name'=> __('My Text ','tax-meta')),true);
+  $repeater_fields[] = $my_meta->addTextarea($prefix.'re_textarea_field_id',array('name'=> __('My Textarea ','tax-meta')),true);
+  $repeater_fields[] = $my_meta->addCheckbox($prefix.'re_checkbox_field_id',array('name'=> __('My Checkbox ','tax-meta')),true);
+  $repeater_fields[] = $my_meta->addImage($prefix.'image_field_id',array('name'=> __('My Image ','tax-meta')),true);
   
   /*
    * Then just add the fields to the repeater block
    */
   //repeater block
-  $my_meta->addRepeaterBlock($prefix.'re_',array('inline' => true, 'name' => 'This is a Repeater Block','fields' => $repeater_fields));
+  $my_meta->addRepeaterBlock($prefix.'re_',array('inline' => true, 'name' => __('This is a Repeater Block','tax-meta'),'fields' => $repeater_fields));
   /*
    * Don't Forget to Close up the meta box decleration
    */

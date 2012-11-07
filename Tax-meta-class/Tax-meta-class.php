@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.9.5
+ * @version 1.9.6
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -545,8 +545,12 @@ class Tax_Meta_Class {
           $f['id'] = $id;
           if (!$field['inline']){
             echo '<tr>';
-          } 
-          call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m));
+          }
+          if ($f['type'] == 'wysiwyg')
+            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m),true);
+          else
+            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m));
+            
           if (!$field['inline']){
             echo '</tr>';
           } 
@@ -597,7 +601,11 @@ class Tax_Meta_Class {
       if (!$field['inline']){
         echo '<tr>';
       }
-      call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, '');
+      if ($f['type'] == 'wysiwyg')
+            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, '',true);
+          else
+            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, '');
+      
       if (!$field['inline']){
         echo '</tr>';
       }  
@@ -613,7 +621,9 @@ class Tax_Meta_Class {
     }
     echo '" alt="'.__('Remove','tax-meta').'" title="'.__('Remove','tax-meta').'" id="remove-'.$field['id'].'"></div>';
     $counter = 'countadd_'.$field['id'];
-    $js_code = ob_get_clean ();    
+    $js_code = ob_get_clean ();
+    $js_code = str_replace("\n","",$js_code);
+    $js_code = str_replace("\r","",$js_code);
     $js_code = str_replace("'","\"",$js_code);
     $js_code = str_replace("CurrentCounter","' + ".$counter." + '",$js_code);
     echo '<script>
@@ -826,12 +836,12 @@ class Tax_Meta_Class {
    * @since 1.0
    * @access public
    */
-  public function show_field_wysiwyg( $field, $meta ) {
+  public function show_field_wysiwyg( $field, $meta ,$in_repeater = false) {
     $this->show_field_begin( $field, $meta );
     // Add TinyMCE script for WP version < 3.3
     global $wp_version;
 
-    if ( version_compare( $wp_version, '3.2.1' ) < 1 ) {
+    if ( version_compare( $wp_version, '3.2.1' ) < 1 || $in_repeater) {
       echo "<textarea style='{$field['style']}' class='at-wysiwyg theEditor large-text' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
     }else{
       // Use new wp_editor() since WP 3.3

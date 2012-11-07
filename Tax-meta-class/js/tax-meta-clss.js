@@ -300,12 +300,14 @@ jQuery(document).ready(function($) {
     window.restore_send_to_editor = window.send_to_editor;
     //overwrite send to editor function
     window.send_to_editor = function(html) {
-      imgurl = jQuery('img',html).attr('src');
-      img_calsses = jQuery('img',html).attr('class').split(" ");
+      d = jQuery('<div>').html(html);
+      imgurl = d.find('img').attr('src');
+      img_calsses = d.find('img').attr('class').split(" ");
       att_id = '';
       jQuery.each(img_calsses,function(i,val){
         if (val.indexOf("wp-image") != -1){
           att_id = val.replace('wp-image-', "");
+          return true;
         }
       });
 

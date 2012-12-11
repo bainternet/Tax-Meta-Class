@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.9.6
+ * @version 1.9.7
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -321,11 +321,15 @@ class Tax_Meta_Class {
     $field_id = isset( $_GET['field_id'] ) ? $_GET['field_id'] : 0;
     $attachment_id = isset( $_GET['attachment_id'] ) ? intval( $_GET['attachment_id'] ) : 0;
     $ok = false;
+    $remove_meta_only = apply_filters("tax_meta_class_delete_image",true);
     if (strpos($field_id, '[') === false){
       check_admin_referer( "at-delete-mupload_".urldecode($field_id));
       if ($term_id > 0)
         $this->delete_tax_meta( $term_id, $field_id );
-      $ok = wp_delete_attachment( $attachment_id );
+      if (!$remove_meta_only)
+        $ok = wp_delete_attachment( $attachment_id );
+      else
+        $ok = true;
     }else{
       $f = explode('[',urldecode($field_id));
       $f_fiexed = array();
@@ -337,7 +341,10 @@ class Tax_Meta_Class {
         unset($saved[$f[1]][$f[2]]);
         if ($term_id > 0)
           update_post_meta($term_id,$f[0],$saved);
-        $ok = wp_delete_attachment( $attachment_id );
+        if (!$remove_meta_only)
+          $ok = wp_delete_attachment( $attachment_id );
+        else
+          $ok = true;
       }
     }
 

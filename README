@@ -20,6 +20,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+1.9.7
+see issue #44
+
 1.9.6
 Added WYSIWYG in repater support and most other fields which never worked in the repeate block, now should work. issue #42
 

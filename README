@@ -2,7 +2,7 @@ Tax Meta Class
 =======================
 Contributors: bainternet
 Requires at least: 3.1
-Tested up to: 3.5 beta 2
+Tested up to: 3.5.1
 
 Description
 -----------
@@ -20,6 +20,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+1.9.8
+fixed issue #49
+
 1.9.7
 see issue #44
 

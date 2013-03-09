@@ -20,6 +20,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+1.9.9
+Fix references for the class for PHP 5.4 compatibility
+
 1.9.8
 fixed issue #49
 

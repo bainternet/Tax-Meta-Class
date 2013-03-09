@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.9.8
+ * @version 1.9.9
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -106,7 +106,7 @@ class Tax_Meta_Class {
     // Assign meta box values to local variables and add it's missed values.
     $this->_meta_box = $meta_box;
     $this->_prefix = (isset($meta_box['prefix'])) ? $meta_box['prefix'] : ''; 
-    $this->_fields = &$this->_meta_box['fields'];
+    $this->_fields = $this->_meta_box['fields'];
     $this->_Local_images = (isset($meta_box['local_images'])) ? true : false;
     $this->add_missed_values();
     if (isset($meta_box['use_with_theme'])){
@@ -123,11 +123,11 @@ class Tax_Meta_Class {
     
     
     // Add Actions
-    add_action( 'admin_init', array( &$this, 'add' ) );
+    add_action( 'admin_init', array( $this, 'add' ) );
     
     // Load common js, css files
     // Must enqueue for all pages as we need js for the media upload, too.
-    add_action( 'admin_print_styles', array( &$this, 'load_scripts_styles' ) );
+    add_action( 'admin_print_styles', array( $this, 'load_scripts_styles' ) );
 
     //overwrite insert into post button
     
@@ -178,7 +178,7 @@ class Tax_Meta_Class {
       return;
     
     // Add data encoding type for file uploading.  
-    add_action( 'admin_footer', array( &$this, 'add_enctype' ) );
+    add_action( 'admin_footer', array( $this, 'add_enctype' ) );
     
     // Make upload feature work event when custom post type doesn't support 'editor'
     wp_enqueue_script( 'media-upload' );
@@ -188,9 +188,9 @@ class Tax_Meta_Class {
     wp_enqueue_script( 'jquery-ui-sortable' );
     
     // Add filters for media upload.
-    add_filter( 'media_upload_gallery', array( &$this, 'insert_images' ) );
-    add_filter( 'media_upload_library', array( &$this, 'insert_images' ) );
-    add_filter( 'media_upload_image',   array( &$this, 'insert_images' ) );
+    add_filter( 'media_upload_gallery', array( $this, 'insert_images' ) );
+    add_filter( 'media_upload_library', array( $this, 'insert_images' ) );
+    add_filter( 'media_upload_image',   array( $this, 'insert_images' ) );
   }
   
   /**
@@ -449,17 +449,17 @@ class Tax_Meta_Class {
     // Loop through array
     foreach ( $this->_meta_box['pages'] as $page ) {
       //add fields to edit form
-      add_action($page.'_edit_form_fields',array( &$this, 'show_edit_form' ));
+      add_action($page.'_edit_form_fields',array( $this, 'show_edit_form' ));
       //add fields to add new form
-      add_action($page.'_add_form_fields',array( &$this, 'show_new_form' )); 
+      add_action($page.'_add_form_fields',array( $this, 'show_new_form' )); 
       // this saves the edit fields
-      add_action( 'edited_'.$page, array( &$this, 'save' ), 10, 2);
+      add_action( 'edited_'.$page, array( $this, 'save' ), 10, 2);
       // this saves the add fields
-      add_action('created_'.$page,array( &$this, 'save' ), 10, 2);
+      add_action('created_'.$page,array( $this, 'save' ), 10, 2);
     }
     // Delete all attachments when delete custom post type.
-    add_action( 'wp_ajax_at_delete_file',     array( &$this, 'delete_file' ) );
-    add_action( 'wp_ajax_at_reorder_images',   array( &$this, 'reorder_images' ) );
+    add_action( 'wp_ajax_at_delete_file',     array( $this, 'delete_file' ) );
+    add_action( 'wp_ajax_at_reorder_images',   array( $this, 'reorder_images' ) );
     // Delete file via Ajax
     add_action( 'wp_ajax_at_delete_mupload', array( $this, 'wp_ajax_delete_image' ) );
     
@@ -509,7 +509,7 @@ class Tax_Meta_Class {
       
       echo '<tr class="form-field">';
       // Call Separated methods for displaying each type of field.
-      call_user_func ( array( &$this, 'show_field_' . $field['type'] ), $field, is_array($meta)? $meta : stripslashes($meta) );
+      call_user_func ( array( $this, 'show_field_' . $field['type'] ), $field, is_array($meta)? $meta : stripslashes($meta) );
       echo '</tr>';
     }
     echo '</table>';
@@ -554,9 +554,9 @@ class Tax_Meta_Class {
             echo '<tr>';
           }
           if ($f['type'] == 'wysiwyg')
-            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m),true);
+            call_user_func ( array( $this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m),true);
           else
-            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m));
+            call_user_func ( array( $this, 'show_field_' . $f['type'] ), $f, is_array($m)? $m : stripslashes($m));
             
           if (!$field['inline']){
             echo '</tr>';
@@ -609,9 +609,9 @@ class Tax_Meta_Class {
         echo '<tr>';
       }
       if ($f['type'] == 'wysiwyg')
-            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, '',true);
+            call_user_func ( array( $this, 'show_field_' . $f['type'] ), $f, '',true);
           else
-            call_user_func ( array( &$this, 'show_field_' . $f['type'] ), $f, '');
+            call_user_func ( array( $this, 'show_field_' . $f['type'] ), $f, '');
       
       if (!$field['inline']){
         echo '</tr>';
@@ -1117,7 +1117,7 @@ class Tax_Meta_Class {
         // Call defined method to save meta value, if there's no methods, call common one.
         $save_func = 'save_field_' . $type;
         if ( method_exists( $this, $save_func ) ) {
-          call_user_func( array( &$this, 'save_field_' . $type ), $term_id, $field, $old, $new );
+          call_user_func( array( $this, 'save_field_' . $type ), $term_id, $field, $old, $new );
         } else {
           $this->save_field( $term_id, $field, $old, $new );
         }

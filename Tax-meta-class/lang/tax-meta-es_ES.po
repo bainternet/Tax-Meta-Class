@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tax meta class\n"
-"POT-Creation-Date: 2013-04-25 09:31+0100\n"
-"PO-Revision-Date: 2013-09-15 00:06+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-15 00:32+0100\n"
+"PO-Revision-Date: 2013-09-15 00:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: David THOMAS <anou@smol.org>\n"
 "Language: fr_FR\n"
@@ -48,6 +49,14 @@ msgstr "Subir nuevos archivos"
 #: ../../Tax-meta-class/Tax-meta-class.php:895
 msgid "Add more files"
 msgstr "Añadir más archivos"
+
+#: ../../Tax-meta-class/Tax-meta-class.php:920
+msgid "Delete Image"
+msgstr "Borrar imagen"
+
+#: ../../Tax-meta-class/Tax-meta-class.php:925
+msgid "Upload Image"
+msgstr "Subir imagen"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:947
 msgid "Select a color"

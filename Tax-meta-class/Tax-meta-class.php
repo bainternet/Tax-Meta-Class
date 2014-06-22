@@ -1102,7 +1102,8 @@ class Tax_Meta_Class {
       
       $name = $field['id'];
       $type = $field['type'];
-      $old = $this->get_tax_meta( $term_id, $name, ! $field['multiple'] );
+      $multiple = (isset($field['multiple'])) ? $field['multiple'] : false;
+      $old = $this->get_tax_meta( $term_id, $name, ! $multiple );
       $new = ( isset( $_POST[$name] ) ) ? $_POST[$name] : ( ( $field['multiple'] ) ? array() : '' );
             
 

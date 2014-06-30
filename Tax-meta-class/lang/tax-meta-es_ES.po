@@ -18,47 +18,47 @@ msgstr ""
 
 #: ../../Tax-meta-class/Tax-meta-class.php:250
 msgid "Delete this image"
-msgstr ""
+msgstr "Borrar esta imagen"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:250
 #: ../../Tax-meta-class/Tax-meta-class.php:882
 msgid "Delete"
-msgstr ""
+msgstr "Borrar"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:357
 msgid "Cannot delete file. Something's wrong."
-msgstr ""
+msgstr "Algo fue mal y no se pudo borrar el archivo."
 
 #: ../../Tax-meta-class/Tax-meta-class.php:582
 #: ../../Tax-meta-class/Tax-meta-class.php:629
 msgid "Remove"
-msgstr ""
+msgstr "Borrar"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:595
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:878
 msgid "Uploaded files"
-msgstr ""
+msgstr "Archivos subidos"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:889
 msgid "Upload new files"
-msgstr ""
+msgstr "Subir nuevos archivos"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:895
 msgid "Add more files"
-msgstr ""
+msgstr "Añadir más archivos"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:920
 msgid "Delete Image"
-msgstr ""
+msgstr "Borrar imagen"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:925
 msgid "Upload Image"
-msgstr ""
+msgstr "Subir imagen"
 
 #: ../../Tax-meta-class/Tax-meta-class.php:947
 msgid "Select a color"
-msgstr ""
+msgstr "Selecciona un color"
 

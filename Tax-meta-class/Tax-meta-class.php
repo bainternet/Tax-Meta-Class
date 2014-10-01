@@ -1965,47 +1965,39 @@ class Tax_Meta_Class {
  */
 
 //get term meta field
-if (!function_exists('get_tax_meta')){
-    function get_tax_meta($term_id,$key,$multi = false){
-        $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
-        $m = get_option( 'tax_meta_'.$t_id);  
-        if (isset($m[$key])){
-            return $m[$key];
-        }else{
-            return '';
-        }
+function get_tax_meta($term_id,$key,$multi = false){
+    $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+    $m = get_option( 'tax_meta_'.$t_id);  
+    if (isset($m[$key])){
+        return $m[$key];
+    }else{
+        return '';
     }
 }
 
 //delete meta
-if (!function_exists('delete_tax_meta')){
-    function delete_tax_meta($term_id,$key){
-        $m = get_option( 'tax_meta_'.$term_id);
-        if (isset($m[$key])){
-            unset($m[$key]);
-        }
-        update_option('tax_meta_'.$term_id,$m);
+function delete_tax_meta($term_id,$key){
+    $m = get_option( 'tax_meta_'.$term_id);
+    if (isset($m[$key])){
+        unset($m[$key]);
     }
+    update_option('tax_meta_'.$term_id,$m);
 }
 
 //update meta
-if (!function_exists('update_tax_meta')){
-    function update_tax_meta($term_id,$key,$value){
-        $m = get_option( 'tax_meta_'.$term_id);
-        $m[$key] = $value;
-        update_option('tax_meta_'.$term_id,$m);
-    }
+function update_tax_meta($term_id,$key,$value){
+    $m = get_option( 'tax_meta_'.$term_id);
+    $m[$key] = $value;
+    update_option('tax_meta_'.$term_id,$m);
 }
 
 //get term meta field and strip slashes
-if (!function_exists('get_tax_meta_strip')){
-    function get_tax_meta_strip($term_id,$key,$multi = false){
-        $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
-        $m = get_option( 'tax_meta_'.$t_id);  
-        if (isset($m[$key])){
-            return is_array($m[$key])? $m[$key] : stripslashes($m[$key]);
-        }else{
-            return '';
-        }
+function get_tax_meta_strip($term_id,$key,$multi = false){
+    $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+    $m = get_option( 'tax_meta_'.$t_id);  
+    if (isset($m[$key])){
+        return is_array($m[$key])? $m[$key] : stripslashes($m[$key]);
+    }else{
+        return '';
     }
 }

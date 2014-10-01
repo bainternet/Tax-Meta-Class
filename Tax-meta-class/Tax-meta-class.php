@@ -1,4 +1,4 @@
-<?php 
+<?php namespace com\github\bainternet;
 /**
  * Tax Meta Class
  *
@@ -28,7 +28,6 @@
  * 
  */
 
-if ( ! class_exists( 'Tax_Meta_Class') ) :
 
 /**
  * All Types Meta Box class.
@@ -1960,8 +1959,6 @@ class Tax_Meta_Class {
   }
   
 } // End Class
-
-endif; // End Check Class Exists
 
 /*
  * meta functions for easy access:

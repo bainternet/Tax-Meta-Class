@@ -17,7 +17,28 @@ a class for creating custom meta boxes for WordPress.
 Usage
 --------
 Take a look at the `class-usage-demo.php` file which can also be tested as a WordPress Plugin. 
-Other options are available for each field which can be see in the 'Tax-meta-class.php' file, 
+Other options are available for each field which can be see in the 'Tax-meta-class.php' file.
+
+To retrieve data from a field, inside of the `category.php` template.
+
+
+Insert this at the top of the file:
+
+```
+<?php use com\github\bainternet as bainternet; ?>
+```
+
+And use this where you can show the content.
+
+```
+<?php
+$cat_id = get_query_var('cat');
+$prefix = 'ba_';
+$field_name = 'textarea_field_id';
+echo bainternet\get_tax_meta($cat_id, $prefix . $field_name);
+?>
+```
+
 
 Changelog
 ---------

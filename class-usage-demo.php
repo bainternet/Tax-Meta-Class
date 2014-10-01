@@ -32,7 +32,7 @@ if (is_admin()){
   /*
    * Initiate your meta box
    */
-  $my_meta =  new Tax_Meta_Class($config);
+  $my_meta =  new \com\github\bainternet\Tax_Meta_Class($config);
   
   /*
    * Add fields to your meta box

@@ -432,7 +432,7 @@ class Tax_Meta_Class {
       // Enqueu JQuery UI, use proper version.
       wp_enqueue_style( 'tmc-jquery-ui-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/themes/base/jquery-ui.css', array(),false,true);
       wp_enqueue_script( 'tmc-jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/jquery-ui.min.js', array( 'jquery' ),false,true );
-      wp_enqueue_script( 'at-timepicker', 'https://github.com/trentrichardson/jQuery-Timepicker-Addon/raw/master/jquery-ui-timepicker-addon.js', array( 'tmc-jquery-ui' ),false,true );
+      wp_enqueue_script( 'at-timepicker', '//cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.js', array( 'tmc-jquery-ui' ),false,true );
     
     }
     
@@ -1898,7 +1898,7 @@ class Tax_Meta_Class {
   
 
   /**
-   * deletetaxonomy_metadata
+   * delete_taxonomy_metadata
    * 
    * delete meta on term deletion
    *
@@ -1966,49 +1966,48 @@ endif; // End Check Class Exists
 /*
  * meta functions for easy access:
  */
+//get term meta field
+if (!function_exists('get_tax_meta')){
+	function get_tax_meta($term_id,$key,$multi = false){
+		$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+		$m = get_option( 'tax_meta_'.$t_id);  
+		if (isset($m[$key])){
+			return $m[$key];
+		}else{
+			return '';
+		}
+	}
+}
 
-  //get term meta field
-  if (!function_exists('get_tax_meta')){
-    function get_tax_meta($term_id,$key,$multi = false){
-      $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
-      $m = get_option( 'tax_meta_'.$t_id);  
-      if (isset($m[$key])){
-        return $m[$key];
-      }else{
-        return '';
-      }
-    }
-  }
+//delete meta
+if (!function_exists('delete_tax_meta')){
+	function delete_tax_meta($term_id,$key){
+		$m = get_option( 'tax_meta_'.$term_id);
+		if (isset($m[$key])){
+			unset($m[$key]);
+		}
+		update_option('tax_meta_'.$term_id,$m);
+	}
+}
 
-  //delete meta
-  if (!function_exists('delete_tax_meta')){
-    function delete_tax_meta($term_id,$key){
-      $m = get_option( 'tax_meta_'.$term_id);
-      if (isset($m[$key])){
-        unset($m[$key]);
-      }
-      update_option('tax_meta_'.$term_id,$m);
-    }
-  }
-  
-  //update meta
-  if (!function_exists('update_tax_meta')){
-    function update_tax_meta($term_id,$key,$value){
-      $m = get_option( 'tax_meta_'.$term_id);
-      $m[$key] = $value;
-      update_option('tax_meta_'.$term_id,$m);
-    }
-  }
+//update meta
+if (!function_exists('update_tax_meta')){
+	function update_tax_meta($term_id,$key,$value){
+		$m = get_option( 'tax_meta_'.$term_id);
+		$m[$key] = $value;
+		update_option('tax_meta_'.$term_id,$m);
+	}
+}
 
-  //get term meta field and strip slashes
-  if (!function_exists('get_tax_meta_strip')){
-    function get_tax_meta_strip($term_id,$key,$multi = false){
-      $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
-      $m = get_option( 'tax_meta_'.$t_id);  
-      if (isset($m[$key])){
-        return is_array($m[$key])? $m[$key] : stripslashes($m[$key]);
-      }else{
-        return '';
-      }
-    }
-  }
+//get term meta field and strip slashes
+if (!function_exists('get_tax_meta_strip')){
+	function get_tax_meta_strip($term_id,$key,$multi = false){
+		$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+		$m = get_option( 'tax_meta_'.$t_id);  
+		if (isset($m[$key])){
+			return is_array($m[$key])? $m[$key] : stripslashes($m[$key]);
+		}else{
+			return '';
+		}
+	}
+}

@@ -534,7 +534,7 @@ class Tax_Meta_Class {
       if (count($meta) > 0 && is_array($meta) ){
          foreach ($meta as $me){
            //for labling toggles
-           $mmm =  ($me[$field])? $me[$field['fields'][0]['id']]: "";
+           $mmm =  isset($me[$field['fields'][0]['id']])? $me[$field['fields'][0]['id']]: "";
            echo '<div class="at-repater-block">'.$mmm.'<br/><table class="repeater-table" style="display: none;">';
            if ($field['inline']){
              echo '<tr class="at-inline" VALIGN="top">';
@@ -699,25 +699,25 @@ class Tax_Meta_Class {
     if (isset($field['group'])){
       if ($group == 'end'){
         if ( isset($field['desc']) && $field['desc'] != '' ) {
-          echo "<div class='desc-field'>{$field['desc']}</div></td>";
+          echo "<p class='description'>{$field['desc']}</p></td>";
         } else {
           echo "</td>";
         }
       }else {
         if ( isset($field['desc']) && $field['desc'] != '' ) {
-          echo "<div class='desc-field'>{$field['desc']}</div><br/>";  
+          echo "<p class='description'>{$field['desc']}</p><br/>";  
         }else{
           echo '<br/>';
         }  
       }    
     }else{
       if ( isset($field['desc']) && $field['desc'] != '' ) {
-        echo "<div class='desc-field'>{$field['desc']}</div>";
+        echo "<p class='description'>{$field['desc']}</p>";
       }
       if ($this->_form_type == 'edit'){
-        echo '<td>';  
+        echo '</td>';  
       }else{
-        echo '<td></div>';
+        echo '</td></div>';
       }
     }
   }

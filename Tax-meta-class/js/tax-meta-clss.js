@@ -467,5 +467,33 @@ jQuery(document).ready(function($) {
     //radio
     $( "input[type='radio']",form ).prop('checked',false);
   }
+  /** pre bind jquery function **/
+  $.fn.preBind = function(type, data, fn) {
+    var currentBindings = this.data('events')[type];
+    var currentBindingsLastIndex = currentBindings.length - 1;
+    var newBindings = [];
+   
+    // bind the event
+    this.bind(type, data, fn);
+   
+    // move the new event to the top of the array
+    newBindings.push(currentBindings[currentBindingsLastIndex]);
+    $.each(currentBindings, function (index) {
+      if (index < currentBindingsLastIndex)
+        newBindings.push(this);
+    });
+    this.data('events')[type] = newBindings;
+   
+    return this;
+  };
+  /** fix tinymce not saving on add screen*/
+  $('#submit').preBind('click', function() {
+    if(typeof tinymce !== "undefined" && $('input[name=action]').val() == 'add-tag'){
+      $.each(tinymce.editors,function(i,editor){
+        var tx = editor.targetElm;
+        $(tx).html(editor.getContent());
+      });
+    }
+  });
 });
 var $respo;

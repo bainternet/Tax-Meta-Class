@@ -884,7 +884,7 @@ class Tax_Meta_Class {
     if (isset($_REQUEST['action'])  &&  $_REQUEST['action'] == 'inline-save-tax') {
       return $term_id;
     }
-    
+
     if ( ! isset( $term_id )                            // Check Revision
     || ( ! isset( $_POST['taxonomy'] ) )              // Check if current taxonomy type is set.
     || ( ! in_array( $_POST['taxonomy'], $this->_meta_box['pages'] ) )              // Check if current taxonomy type is supported.
@@ -1742,4 +1742,10 @@ if (!function_exists('get_tax_meta_strip')){
 			return '';
 		}
 	}
+}
+//get all meta
+function get_tax_meta_all( $term_id){
+    $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+    $m = get_option( 'tax_meta_'.$t_id,array());
+    return $m;
 }

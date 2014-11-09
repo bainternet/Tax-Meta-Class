@@ -177,214 +177,9 @@ class Tax_Meta_Class {
     if ( ! $this->has_field( 'image' ) && ! $this->has_field( 'file' ) )
       return;
     
-    // Add data encoding type for file uploading.  
-    add_action( 'admin_footer', array( $this, 'add_enctype' ) );
-    
     // Make upload feature work event when custom post type doesn't support 'editor'
-    wp_enqueue_script( 'media-upload' );
-    wp_enqueue_script('thickbox');
-    add_thickbox();
     wp_enqueue_script( 'jquery-ui-core' );
     wp_enqueue_script( 'jquery-ui-sortable' );
-    
-    // Add filters for media upload.
-    add_filter( 'media_upload_gallery', array( $this, 'insert_images' ) );
-    add_filter( 'media_upload_library', array( $this, 'insert_images' ) );
-    add_filter( 'media_upload_image',   array( $this, 'insert_images' ) );
-  }
-  
-  /**
-   * Add data encoding type for file uploading
-   *
-   * @since 1.0
-   * @access public
-   */
-  public function add_enctype () {
-   ?> 
-   <script>
-      jQuery(document).ready(function(){
-         jQuery("#edittag").attr('enctype','multipart/form-data');
-      });
-   </script>
-   <?php
-  }
-  
-  /**
-   * Process images added to meta field.
-   *
-   * Modified from Faster Image Insert plugin.
-   *
-   * @return void
-   * @author Cory Crowley
-   */
-  public function insert_images() {
-    
-    // If post variables are empty, return.
-    if ( ! isset( $_POST['at-insert'] ) || empty( $_POST['attachments'] ) )
-      return;
-    
-    // Security Check
-    check_admin_referer( 'media-form' );
-    
-    // Create Security Nonce
-    $nonce = wp_create_nonce( 'at_ajax_delete' );
-    
-    // Get Post Id and Field Id
-    $term_id = $_POST['post_id'];
-    $id = $_POST['field_id'];
-    
-    // Modify the insertion string
-    $html = '';
-    foreach( $_POST['attachments'] as $attachment_id => $attachment ) {
-      
-      // Strip Slashes
-      $attachment = stripslashes_deep( $attachment );
-      
-      // If not selected or url is empty, continue in loop.
-      if ( empty( $attachment['selected'] ) || empty( $attachment['url'] ) )
-        continue;
-        
-      $li    = "<li id='item_{$attachment_id}'>";
-      $li   .= "<img src='{$attachment['url']}' alt='image_{$attachment_id}' />";
-      //$li   .= "<a title='" . __( 'Delete this image' ) . "' class='at-delete-file' href='#' rel='{$nonce}|{$term_id}|{$id}|{$attachment_id}'>" . __( 'Delete' ) . "</a>";
-      $li   .= "<a title='" . __( 'Delete this image','tax-meta') . "' class='at-delete-file' href='#' rel='{$nonce}|{$term_id}|{$id}|{$attachment_id}'><img src='" . $this->SelfPath. "/images/delete-16.png' alt='" . __( 'Delete','tax-meta') . "' /></a>";
-      $li   .= "<input type='hidden' name='{$id}[]' value='{$attachment_id}' />";
-      $li   .= "</li>";
-      $html .= $li;
-      
-    } // End For Each
-    
-    return media_send_to_editor( $html );
-    
-  }
-  
-  /**
-   * Delete attachments associated with the post.
-   *
-   * @since 1.0
-   * @access public
-   *
-   * @param string $term_id 
-   */
-  public function delete_attachments( $term_id ) {
-    
-    // Get Attachments
-    $attachments = get_posts( array( 'numberposts' => -1, 'post_type' => 'attachment', 'post_parent' => $term_id ) );
-    
-    // Loop through attachments, if not empty, delete it.
-    if ( ! empty( $attachments ) ) {
-      foreach ( $attachments as $att ) {
-        wp_delete_attachment( $att->ID );
-      }
-    }
-    
-  }
-  
-  /**
-   * Ajax callback for deleting files.
-   * 
-   * Modified from a function used by "Verve Meta Boxes" plugin ( http://goo.gl/aw64H )
-   *
-   * @since 1.0
-   * @access public 
-   */
-  public function delete_file() {
-    // If data is not set, die.
-    if ( ! isset( $_POST['data'] ) )
-      die();
-      
-    list($nonce, $term_id, $key, $attach_id) = explode('|', $_POST['data']);
-    $term_id = $_POST['tag_id'];
-    $arrKey = (int)$_POST['idx'];
-    if ( ! wp_verify_nonce( $nonce, 'at_ajax_delete_file' ) )
-      die( '1' );
-    
-    $saved = $this->get_tax_meta($term_id,$key,true);
-    $index = array_search($attach_id, $saved);
-    unset($saved[$index]);
-    wp_delete_attachment( $attach_id );
-    if (count($saved) > 0){
-      $this->update_tax_meta($term_id,$key,$saved);
-      die('0');
-    }
-    $this->delete_tax_meta( $term_id, $key);
-    die( '0' );
-  }
-  /**
-  * Ajax callback for deleting files.
-  * Modified from a function used by "Verve Meta Boxes" plugin (http://goo.gl/LzYSq)
-  * @since 1.0
-  * @access public
-  */
-  public function wp_ajax_delete_image() {
-    $term_id = isset( $_GET['post_id'] ) ? intval( $_GET['post_id'] ) : 0;
-    $field_id = isset( $_GET['field_id'] ) ? $_GET['field_id'] : 0;
-    $attachment_id = isset( $_GET['attachment_id'] ) ? intval( $_GET['attachment_id'] ) : 0;
-    $ok = false;
-    $remove_meta_only = apply_filters("tax_meta_class_delete_image",true);
-    if (strpos($field_id, '[') === false){
-      check_admin_referer( "at-delete-mupload_".urldecode($field_id));
-      if ($term_id > 0)
-        $this->delete_tax_meta( $term_id, $field_id );
-      if (!$remove_meta_only)
-        $ok = wp_delete_attachment( $attachment_id );
-      else
-        $ok = true;
-    }else{
-      $f = explode('[',urldecode($field_id));
-      $f_fiexed = array();
-      foreach ($f as $k => $v){
-        $f[$k] = str_replace(']','',$v);
-      }
-      $saved = $this->get_tax_meta($term_id,$f[0],true);
-      if (isset($saved[$f[1]][$f[2]])){
-        unset($saved[$f[1]][$f[2]]);
-        if ($term_id > 0)
-          update_post_meta($term_id,$f[0],$saved);
-        if (!$remove_meta_only)
-          $ok = wp_delete_attachment( $attachment_id );
-        else
-          $ok = true;
-      }
-    }
-
-    
-    
-    if ( $ok ){
-      echo json_encode( array('status' => 'success' ));
-      die();
-    }else{
-      echo json_encode(array('message' => __( 'Cannot delete file. Something\'s wrong.','tax-meta')));
-      die();
-    }
-  }
-  
-  /**
-   * Ajax callback for reordering Images.
-   *
-   * @since 1.0
-   * @access public
-   */
-  public function reorder_images() {
-    
-    if ( ! isset( $_POST['data'] ) )
-      die();
-      
-    list( $order, $term_id, $key, $nonce ) = explode( '|', $_POST['data'] );
-    
-    if ( ! wp_verify_nonce( $nonce, 'at_ajax_reorder' ) )
-      die( '1' );
-      
-    parse_str( $order, $items );
-    $items = $items['item'];
-    $order = 1;
-    foreach ( $items as $item ) {
-      wp_update_post( array( 'ID' => $item, 'post_parent' => $term_id, 'menu_order' => $order ) );
-      $order++;
-    }
-    
-    die( '0' );
-  
   }
   
   /**
@@ -866,35 +661,29 @@ class Tax_Meta_Class {
    * @access public
    */
   public function show_field_file( $field, $meta ) {
-    
-    if ( ! is_array( $meta ) )
-      $meta = (array) $meta;
-
     $this->show_field_begin( $field, $meta );
-      echo "{$field['desc']}<br />";
+	wp_enqueue_script('jquery-ui-sortable');
+	wp_enqueue_media();
+	$std      = isset($field['std'])? $field['std'] : array('id' => '', 'url' => '');
+	$multiple = isset($field['multiple'])? $field['multiple'] : false;
+	$multiple = ($multiple)? "multiFile '" : "";
+	$name     = esc_attr( $field['id'] );
+	$value    = isset($meta['id']) ? $meta : $std;
+	$has_file = (empty($value['url']))? false : true;
+	$type     = isset($field['mime_type'])? $field['mime_type'] : '';
+	$ext      = isset($field['ext'])? $field['ext'] : '';
+	$type     = (is_array($type)? implode("|",$type) : $type);
+	$ext      = (is_array($ext)? implode("|",$ext) : $ext);
+	$id       = $field['id'];
+	$li       = ($has_file)? "<li><a href='{$value['url']}' target='_blank'>{$value['url']}</a></li>": "";
 
-      if ( !empty( $meta )  && count($meta) > 0 && !$this->is_array_empty($meta) ) {
-        $nonce = wp_create_nonce( 'at_ajax_delete_file' );
-        echo '<div style="margin-bottom: 10px"><strong>' . __('Uploaded files','tax-meta') . '</strong></div>';
-        echo '<ol class="at-upload">';
-        foreach ( $meta as $att ) {
-          // if (wp_attachment_is_image($att)) continue; // what's image uploader for?
-          echo "<li>" . wp_get_attachment_link( $att, '' , false, false, ' ' ) . " (<a class='at-delete-file' href='#' rel='{$nonce}||{$field['id']}|{$att}'>" . __( 'Delete','tax-meta' ) . "</a>)</li>";
-        }
-        echo '</ol>';
-      }
-
-      // show form upload
-    echo "<div class='at-file-upload-label'> \n
-      <strong>" . __( 'Upload new files','tax-meta' ) . "</strong>\n
-    </div>\n";
-    echo "<div class='new-files'>\n
-      <div class='file-input'>\n
-        <input type='file' name='{$field['id']}[]' />\n
-      </div><!-- End .file-input -->\n
-      <a class='at-add-file button' href='#'>" . __( 'Add more files','tax-meta' ) . "</a>\n
-      </div><!-- End .new-files -->\n";
-    echo "</td>";
+	echo "<span class='simplePanelfilePreview'><ul>{$li}</ul></span>";
+	echo "<input type='hidden' name='{$name}[id]' value='{$value['id']}'/>";
+	echo "<input type='hidden' name='{$name}[url]' value='{$value['url']}'/>";
+	if ($has_file)
+		echo "<input type='button' class='{$multiple} button simplePanelfileUploadclear' id='{$id}' value='Remove File' data-mime_type='{$type}' data-ext='{$ext}'/>";
+	else
+		echo "<input type='button' class='{$multiple} button simplePanelfileUpload' id='{$id}' value='Upload File' data-mime_type='{$type}' data-ext='{$ext}'/>";
     $this->show_field_end( $field, $meta );
   }
   
@@ -907,25 +696,32 @@ class Tax_Meta_Class {
    * @access public
    */
   public function show_field_image( $field, $meta ) {
-    $this->show_field_begin( $field, $meta );
-    $html = wp_nonce_field( "at-delete-mupload_{$field['id']}", "nonce-delete-mupload_".$field['id'], false, false );
-    if (is_array($meta)){
-      if(isset($meta[0]) && is_array($meta[0]))
-      $meta = $meta[0];
-    }
-    if (is_array($meta) && isset($meta['src']) && $meta['src'] != ''){
-      $html .= "<span class='mupload_img_holder'><img src='".$meta['src']."' style='height: 150px;width: 150px;' /></span>";
-      $html .= "<input type='hidden' name='".$field['id']."[id]' id='".$field['id']."[id]' value='".$meta['id']."' />";
-      $html .= "<input type='hidden' name='".$field['id']."[src]' id='".$field['id']."[src]' value='".$meta['src']."' />";
-      $html .= "<input class='at-delete_image_button' type='button' rel='".$field['id']."' value='Delete Image' />";
-    }else{
-      $html .= "<span class='mupload_img_holder'></span>";
-      $html .= "<input type='hidden' name='".$field['id']."[id]' id='".$field['id']."[id]' value='' />";
-      $html .= "<input type='hidden' name='".$field['id']."[src]' id='".$field['id']."[src]' value='' />";
-      $html .= "<input class='at-upload_image_button' type='button' rel='".$field['id']."' value='Upload Image' />";
-    }
-    echo $html;
-    $this->show_field_end( $field, $meta );
+  	$this->show_field_begin( $field, $meta );
+    wp_enqueue_script('jquery-ui-sortable');
+	wp_enqueue_media();
+	$std          = isset($field['std'])? $field['std'] : array('id' => '', 'url' => '');
+	$name         = esc_attr( $field['id'] );
+	$value        = isset($meta['id']) ? $meta : $std;
+	//backwords capability
+	if (!isset($value['url']))
+		$value['url'] = '';
+	$value['url'] = isset($value['src'])? $value['src']: $value['url'];
+	$has_image    = empty($value['url'])? false : true;
+	$w            = isset($field['width'])? $field['width'] : 'auto';
+	$h            = isset($field['height'])? $field['height'] : 'auto';
+	$PreviewStyle = "style='width: $w; height: $h;". ( (!$has_image)? "display: none;'": "'");
+	$id           = $field['id'];
+	$multiple     = isset($field['multiple'])? $field['multiple'] : false;
+	$multiple     = ($multiple)? "multiFile " : "";
+
+	echo "<span class='simplePanelImagePreview'><img {$PreviewStyle} src='{$value['url']}'><br/></span>";
+	echo "<input type='hidden' name='{$name}[id]' value='{$value['id']}'/>";
+	echo "<input type='hidden' name='{$name}[url]' value='{$value['url']}'/>";
+	if ($has_image)
+		echo "<input class='{$multiple} button  simplePanelimageUploadclear' id='{$id}' value='".__('Remove Image')."' type='button'/>";
+	else
+		echo "<input class='{$multiple} button simplePanelimageUpload' id='{$id}' value='".__('Upload Image')."' type='button'/>";
+	$this->show_field_end( $field, $meta );
   }
   
   /**
@@ -1159,7 +955,7 @@ class Tax_Meta_Class {
   public function save_field_image( $term_id, $field, $old, $new ) {
     $name = $field['id'];
     $this->delete_tax_meta( $term_id, $name );
-    if ( $new === '' || $new === array() || $new['id'] == '' || $new['src'] == '') 
+    if ( $new === '' || $new === array() || $new['id'] == '' || $new['url'] == '') 
       return;
     
     $this->update_tax_meta( $term_id, $name, $new );
@@ -1233,78 +1029,13 @@ class Tax_Meta_Class {
   public function save_field_file( $term_id, $field, $old, $new ) {
 
     $name = $field['id'];
-    if ( empty( $_FILES[$name] ) && !is_array($old)){
-      $this->delete_tax_meta($term_id,$name);
+    $this->delete_tax_meta( $term_id, $name );
+    if ( $new === '' || $new === array() || $new['id'] == '' || $new['url'] == '') 
       return;
-    }
-    $temp = $this->get_tax_meta($term_id,$name,true);
-    $temp = is_array($temp) ? $temp : array();
-    $this->fix_file_array( $_FILES[$name] );
-    foreach ( $_FILES[$name] as $position => $fileitem ) {
-
-      $file = wp_handle_upload( $fileitem, array( 'test_form' => false ) );
-      if ( empty( $file['file'] ) ) 
-        continue;
-      $filename = $file['file'];
-
-      $attachment = array(
-        'post_mime_type' => $file['type'],
-        'guid' => $file['url'],
-        'post_parent' => $term_id,
-        'post_title' => preg_replace('/\.[^.]+$/', '', basename( $filename ) ),
-        'post_content' => ''
-      );
-
-      $id = wp_insert_attachment( $attachment, $filename);
-
-      if ( ! is_wp_error( $id ) ) {
-        wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $filename ) );
-            $temp[] = $id;  // save file's url in meta fields
-      } // End if
-    } // End foreach
-    if (count($temp) > 0)
-    $this->update_tax_meta( $term_id, $name, $temp);
+    
+    $this->update_tax_meta( $term_id, $name, $new );
   }
   
-  /**
-   * Save repeater File Field.
-   * @param string $term_id 
-   * @param string $field 
-   * @param string $old 
-   * @param string $new 
-   * @since 1.0
-   * @access public
-   */
-  public function save_field_file_repeater( $term_id, $field, $old, $new ) {
-  
-    $name = $field['id'];
-    if ( empty( $_FILES[$name] ) ) 
-      return;
-    $this->fix_file_array( $_FILES[$name] );
-    foreach ( $_FILES[$name] as $position => $fileitem ) {
-      
-      $file = wp_handle_upload( $fileitem, array( 'test_form' => false ) );
-      if ( empty( $file['file'] ) ) 
-        continue;
-      $filename = $file['file'];
-
-      $attachment = array(
-        'post_mime_type' => $file['type'],
-        'guid' => $file['url'],
-        'post_parent' => $term_id,
-        'post_title' => preg_replace('/\.[^.]+$/', '', basename( $filename ) ),
-        'post_content' => ''
-      );
-      
-      $id = wp_insert_attachment( $attachment, $filename);
-      
-      if ( ! is_wp_error( $id ) ) {
-        
-        wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $filename ) );
-        return $id;  // return file's url in meta fields
-      } // End if
-    } // End foreach
-  }
   
   /**
    * Add missed values for meta box.

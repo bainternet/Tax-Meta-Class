@@ -21,6 +21,9 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+2.0.1
+Fixed #93.
+
 2.0.0
 Too many changes to list :)
 major ones are around the image and file fields which no use `url` instead of `src` and allow multiple images/files that are stored in two fields of urls and ids split by a pipe `|`.

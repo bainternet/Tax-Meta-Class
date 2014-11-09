@@ -9,8 +9,8 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 2.0.0
- * @copyright 2012 Ohad Raz 
+ * @version 2.0.1
+ * @copyright 2012-2014 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
  * 
@@ -705,6 +705,8 @@ class Tax_Meta_Class {
 	//backwords capability
 	if (!isset($value['url']))
 		$value['url'] = '';
+  if (!isset($value['id']))
+    $value['id'] = '';
 	$value['url'] = isset($value['src'])? $value['src']: $value['url'];
 	$has_image    = empty($value['url'])? false : true;
 	$w            = isset($field['width'])? $field['width'] : 'auto';

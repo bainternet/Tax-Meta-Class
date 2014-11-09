@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 1.9.9
+ * @version 2.0.0
  * @copyright 2012 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -1743,9 +1743,10 @@ if (!function_exists('get_tax_meta_strip')){
 		}
 	}
 }
-//get all meta
-function get_tax_meta_all( $term_id){
-    $t_id = (is_object($term_id))? $term_id->term_id: $term_id;
-    $m = get_option( 'tax_meta_'.$t_id,array());
-    return $m;
+//get all meta fields of a term
+if (!function_exists('get_tax_meta_all')){
+	function get_tax_meta_all( $term_id){
+		$t_id = (is_object($term_id))? $term_id->term_id: $term_id;
+		return get_option( 'tax_meta_'.$t_id,array());
+	}
 }

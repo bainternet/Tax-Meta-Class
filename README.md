@@ -2,7 +2,7 @@ Tax Meta Class
 =======================
 Contributors: bainternet
 Requires at least: 3.5
-Tested up to: 3.9
+Tested up to: 4.0
 [![Analytics](https://ga-beacon.appspot.com/UA-50573135-3/tax-meta-class/main)](https://github.com/bainternet/Tax-Meta-Class)
 
 Description
@@ -21,6 +21,10 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+2.0.0
+Too many changes to list :)
+major ones are around the image and file fields which no use `url` instead of `src` and allow multiple images/files that are stored in two fields of urls and ids split by a pipe `|`.
+
 1.9.9
 Fix references for the class for PHP 5.4 compatibility
 

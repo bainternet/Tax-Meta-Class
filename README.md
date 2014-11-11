@@ -21,6 +21,11 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+2.0.2
+Fixed jquery ui not loading theme and better jquery ui to WP version handling.
+Added a filter hook to change jQuery ui theme `tmc_jquery_ui_theme`.
+Better preBind jQuery plgin included.
+
 2.0.1
 Fixed #93.
 

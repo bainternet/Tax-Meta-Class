@@ -1133,12 +1133,23 @@ class Tax_Meta_Class {
     
     global $wp_version;
     
+    if ( version_compare( $wp_version, '4.0', '>=') ) {
+      return '1.11.2';
+    }
+    if ( version_compare( $wp_version, '3.9', '>=') ) {
+      return '1.10.4';
+    }
+    if ( version_compare( $wp_version, '3.8', '>=') ) {
+      return '1.10.3';
+    }
+    if ( version_compare( $wp_version, '3.5', '>=') ) {
+      return '1.9.2';
+    }
     if ( version_compare( $wp_version, '3.1', '>=') ) {
       return '1.8.10';
     }
     
-    return '1.7.3';
-  
+    return '1.7.3';  
   }
   
   /**

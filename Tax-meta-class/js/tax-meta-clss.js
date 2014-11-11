@@ -434,6 +434,26 @@ jQuery(document).ready(function($) {
         });
       }catch(err) {}
     });
+  function version_compare(a,b){
+    var c=a.split('.');
+    var d=b.split('.');
+    for(var i=0;i<c.length;++i){
+      if(d.length==i){
+        return"gt";
+      }
+      if(c[i]==d[i]){
+        continue;
+      }else if(c[i]>d[i]){
+        return"gt";
+      }else{
+        return"lt";
+      }
+    }
+    if(c.length!=d.length){
+      return"lt";
+    }
+    return"eq";
+  }
   function clear_form(form){
     $('input[type="text"]:visible, textarea:visible', form).val('');
     //color field
@@ -468,22 +488,19 @@ jQuery(document).ready(function($) {
     $( "input[type='radio']",form ).prop('checked',false);
   }
   /** pre bind jquery function **/
-  $.fn.preBind = function(type, data, fn) {
-    var currentBindings = this.data('events')[type];
-    var currentBindingsLastIndex = currentBindings.length - 1;
-    var newBindings = [];
-   
-    // bind the event
-    this.bind(type, data, fn);
-   
-    // move the new event to the top of the array
-    newBindings.push(currentBindings[currentBindingsLastIndex]);
-    $.each(currentBindings, function (index) {
-      if (index < currentBindingsLastIndex)
-        newBindings.push(this);
+  $.fn.preBind = function (type, data, fn) {
+    this.each(function () {
+        var $this = $(this);
+
+        $this.bind(type, data, fn);
+        if (version_compare($.fn.jquery,'1.8') == 'lt')
+          var currentBindings = $this.data('events')[type];
+        else
+          var currentBindings = $._data(this, "events")[type];
+        if ($.isArray(currentBindings)) {
+            currentBindings.unshift(currentBindings.pop());
+        }
     });
-    this.data('events')[type] = newBindings;
-   
     return this;
   };
   /** fix tinymce not saving on add screen*/

@@ -319,7 +319,7 @@ if ( ! class_exists( 'Tax_Meta_Class') ) :
 			$plugin_path = $this->SelfPath;
 			$this->show_field_begin( $field, $meta );
 			echo "<div class='at-repeat' id='{$field['id']}'>";
-
+			$c = 0;
 			if (count($meta) > 0 && is_array($meta) ){
 				foreach ($meta as $c => $me){
 					//for labling toggles

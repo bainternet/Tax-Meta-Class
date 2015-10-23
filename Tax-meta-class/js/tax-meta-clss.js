@@ -172,15 +172,11 @@ jQuery(document).ready(function($) {
    * better handler for color picker with repeater fields support
    * which now works both when button is clicked and when field gains focus.
    */
-  $(document).on('focus','.at-color', function() {
-    var $this = $(this);
-    $(this).siblings('.at-color-picker').farbtastic($this).toggle();
-  });
+   if( typeof jQuery.wp === 'object' && typeof jQuery.wp.wpColorPicker === 'function' ){
 
-  $(document).on('focusout','.at-color', function() {
-    var $this = $(this);
-    $(this).siblings('.at-color-picker').farbtastic($this).toggle();
-  });
+        jQuery( '.at-color-picker' ).wpColorPicker();
+
+    }
   
   /**
    * Helper Function

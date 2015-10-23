@@ -192,8 +192,8 @@ class Tax_Meta_Class {
     
     if ( $this->has_field( 'color' ) && $this->is_edit_page() ) {
       // Enqueu built-in script and style for color picker.
-      wp_enqueue_style( 'farbtastic' );
-      wp_enqueue_script( 'farbtastic' );
+         wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_script( 'wp-color-picker' );
     }
     
   }
@@ -730,16 +730,16 @@ class Tax_Meta_Class {
    * @since 1.0
    * @access public
    */
-  public function show_field_color( $field, $meta ) {
+   public function show_field_color( $field, $meta ) {
     
     if ( empty( $meta ) ) 
       $meta = '#';
       
     $this->show_field_begin( $field, $meta );
-      echo "<input class='at-color' type='text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' size='8' />";
+      echo "<input class='at-color-picker' type='text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' size='6' />";
     //  echo "<a href='#' class='at-color-select button' rel='{$field['id']}'>" . __( 'Select a color' ) . "</a>";
-      echo "<input type='button' class='at-color-select button' rel='{$field['id']}' value='" . __( 'Select a color','tax-meta' ) . "'/>";
-      echo "<div style='display:none' class='at-color-picker' rel='{$field['id']}'></div>";
+     
+     
     $this->show_field_end($field, $meta);
     
   }

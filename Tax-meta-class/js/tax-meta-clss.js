@@ -154,6 +154,7 @@ jQuery(document).ready(function($) {
     
   });
 
+  $('.at-color').wpColorPicker();
   
   /**
    * Helper Function

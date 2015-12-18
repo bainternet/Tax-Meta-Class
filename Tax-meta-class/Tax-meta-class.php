@@ -698,34 +698,34 @@ class Tax_Meta_Class {
    * @access public
    */
   public function show_field_image( $field, $meta ) {
-  	$this->show_field_begin( $field, $meta );
+    $this->show_field_begin( $field, $meta );
     wp_enqueue_script('jquery-ui-sortable');
-	wp_enqueue_media();
-	$std          = isset($field['std'])? $field['std'] : array('id' => '', 'url' => '');
-	$name         = esc_attr( $field['id'] );
-	$value        = isset($meta['id']) ? $meta : $std;
-	//backwords capability
-	if (!isset($value['url']))
-		$value['url'] = '';
-  if (!isset($value['id']))
+    wp_enqueue_media();
+    $std          = isset($field['std'])? $field['std'] : array('id' => '', 'url' => '');
+    $name         = esc_attr( $field['id'] );
+    $value        = isset($meta['id']) ? $meta : $std;
+    //backwords capability
+    if (!isset($value['url']))
+    $value['url'] = '';
+    if (!isset($value['id']))
     $value['id'] = '';
-	$value['url'] = isset($value['src'])? $value['src']: $value['url'];
-	$has_image    = empty($value['url'])? false : true;
-	$w            = isset($field['width'])? $field['width'] : 'auto';
-	$h            = isset($field['height'])? $field['height'] : 'auto';
-	$PreviewStyle = "style='width: $w; height: $h;". ( (!$has_image)? "display: none;'": "'");
-	$id           = $field['id'];
-	$multiple     = isset($field['multiple'])? $field['multiple'] : false;
-	$multiple     = ($multiple)? "multiFile " : "";
+    $value['url'] = isset($value['src'])? $value['src']: $value['url'];
+    $has_image    = empty($value['url'])? false : true;
+    $w            = isset($field['width'])? $field['width'] : 'auto';
+    $h            = isset($field['height'])? $field['height'] : 'auto';
+    $PreviewStyle = "style='width: $w; height: $h;". ( (!$has_image)? "display: none;'": "'");
+    $id           = $field['id'];
+    $multiple     = isset($field['multiple'])? $field['multiple'] : false;
+    $multiple     = ($multiple)? "multiFile " : "";
 
-	echo "<span class='simplePanelImagePreview'><img {$PreviewStyle} src='{$value['url']}'><br/></span>";
-	echo "<input type='hidden' name='{$name}[id]' value='{$value['id']}'/>";
-	echo "<input type='hidden' name='{$name}[url]' value='{$value['url']}'/>";
-	if ($has_image)
-		echo "<input class='{$multiple} button  simplePanelimageUploadclear' id='{$id}' value='".__('Remove Image')."' type='button'/>";
-	else
-		echo "<input class='{$multiple} button simplePanelimageUpload' id='{$id}' value='".__('Upload Image')."' type='button'/>";
-	$this->show_field_end( $field, $meta );
+    echo "<span class='simplePanelImagePreview'><img {$PreviewStyle} src='{$value['url']}'><br/></span>";
+    echo "<input type='hidden' name='{$name}[id]' value='{$value['id']}'/>";
+    echo "<input type='hidden' name='{$name}[url]' value='{$value['url']}'/>";
+    if ($has_image)
+    echo "<input class='{$multiple} button  simplePanelimageUploadclear' id='{$id}' value='".__('Remove Image')."' type='button'/>";
+    else
+    echo "<input class='{$multiple} button simplePanelimageUpload' id='{$id}' value='".__('Upload Image')."' type='button'/>";
+    $this->show_field_end( $field, $meta );
   }
   
   /**

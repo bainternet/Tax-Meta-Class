@@ -1587,9 +1587,8 @@ class Tax_Meta_Class {
    *  @access public
    *  @param $id string  field id, i.e. the meta key
    *  @param $options mixed|array options of taxonomy field
-   *    'post_type' =>    // post type name, 'post' (default) 'page' or any custom post type
    *    'type' =>  // how to show posts? 'select' (default) or 'checkbox_list'
-   *    'args' =>  // arguments to query posts, see http://goo.gl/is0yK default ('posts_per_page' => -1)  
+   *    'args' =>  // arguments to query posts, see http://goo.gl/is0yK default ('posts_per_page' => -1, 'post_type' => 'post')  
    *  @param $args mixed|array
    *    'name' => // field name/label string optional
    *    'desc' => // field description, string optional
@@ -1598,8 +1597,7 @@ class Tax_Meta_Class {
    *  @param $repeater bool  is this a field inside a repeatr? true|false(default)
    */
   public function addPosts($id,$options,$args,$repeater=false){
-    $q = array('posts_per_page' => -1);
-    $temp = array('post_type' =>'post','type'=>'select','args'=>$q);
+    $temp = array('type'=>'select','args'=> array('posts_per_page' => -1, 'post_type' =>'post') );
     $options = array_merge($temp,$options);
     $new_field = array('type' => 'posts','id'=> $id,'desc' => '','name' => 'Posts Field','options'=> $options,'multiple' => false);
     $new_field = array_merge($new_field, $args);

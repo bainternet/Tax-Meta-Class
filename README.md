@@ -21,6 +21,10 @@ Other options are available for each field which can be see in the 'Tax-meta-cla
 
 Changelog
 ---------
+2.1.0
+Added support for WordPress 4.4 native term meta table
+added migration class
+
 2.0.2
 Fixed jquery ui not loading theme and better jquery ui to WP version handling.
 Added a filter hook to change jQuery ui theme `tmc_jquery_ui_theme`.

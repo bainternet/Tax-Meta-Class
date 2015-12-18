@@ -9,8 +9,8 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 2.0.2
- * @copyright 2012-2014 Ohad Raz 
+ * @version 2.1.0
+ * @copyright 2012-2015 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
  * 
@@ -288,14 +288,20 @@ class Tax_Meta_Class {
    * @access public 
    */
   public function show($term_id) {
-    
+    $term_id = is_object($term_id)? $term_id->term_id: $term_id;
     wp_nonce_field( basename(__FILE__), 'tax_meta_class_nonce' );
     
     foreach ( $this->_fields as $field ) {
     $multiple = isset($field['multiple'])? $field['multiple'] : false;
-      $meta = $this->get_tax_meta( $term_id, $field['id'], !$multiple );
+    $name = $field['id'];
+    //wordpress 4.4 term meta support
+    if ( function_exists('get_term_meta')){
+      $meta = get_term_meta($term_id, $name, !$multiple );
+    }else{
+      $meta = $this->get_tax_meta( $term_id, $name, !$multiple  );
+    }
     $meta = ( $meta !== '' ) ? $meta : (isset($field['std'])? $field['std'] : '');
-      if ('image' != $field['type'] && $field['type'] != 'repeater')
+    if ('image' != $field['type'] && $field['type'] != 'repeater')
         $meta = is_array( $meta ) ? array_map( 'esc_attr', $meta ) : esc_attr( $meta );
       
       echo '<tr class="form-field">';
@@ -877,7 +883,7 @@ class Tax_Meta_Class {
    * @access public 
    */
   public function save( $term_id ) {
-    
+
     // check if the we are coming from quick edit issue #38 props to Nicola Peluchetti.
     if (isset($_REQUEST['action'])  &&  $_REQUEST['action'] == 'inline-save-tax') {
       return $term_id;
@@ -897,7 +903,12 @@ class Tax_Meta_Class {
       $name = $field['id'];
       $type = $field['type'];
       $multiple = isset($field['multiple'])? $field['multiple']: false;
-      $old = $this->get_tax_meta( $term_id, $name, !$multiple  );
+      //wordpress 4.4 term meta support
+      if ( function_exists('get_term_meta')){
+        $old = get_term_meta($term_id, $name, !$multiple );
+      }else{
+          $old = $this->get_tax_meta( $term_id, $name, !$multiple  );
+      }
       $new = ( isset( $_POST[$name] ) ) ? $_POST[$name] : ( ( $multiple ) ? array() : '' );
             
 
@@ -933,11 +944,20 @@ class Tax_Meta_Class {
    */
   public function save_field( $term_id, $field, $old, $new ) {
     $name = $field['id'];
-    $this->delete_tax_meta( $term_id, $name );
+    //wordpress 4.4 term meta support
+    if ( function_exists('get_term_meta')){ 
+      delete_term_meta($term_id, $name);
+    }else{
+      $this->delete_tax_meta( $term_id, $name );
+    }
     if ( $new === '' || $new === array() ) 
       return;
     
-    $this->update_tax_meta( $term_id, $name, $new );
+    if ( function_exists('update_term_meta')){ 
+      update_term_meta( $term_id, $name, $new );
+    }else{
+      $this->update_tax_meta( $term_id, $name, $new );
+    }
   }  
   
   /**
@@ -952,11 +972,20 @@ class Tax_Meta_Class {
    */
   public function save_field_image( $term_id, $field, $old, $new ) {
     $name = $field['id'];
-    $this->delete_tax_meta( $term_id, $name );
+    if ( function_exists('delete_term_meta')){ 
+      delete_term_meta($term_id, $name);
+    }else{
+      $this->delete_tax_meta( $term_id, $name );
+    }
+
     if ( $new === '' || $new === array() || $new['id'] == '' || $new['url'] == '') 
       return;
     
-    $this->update_tax_meta( $term_id, $name, $new );
+    if ( function_exists('update_term_meta')){ 
+      update_term_meta( $term_id, $name, $new );
+    }else{
+      $this->update_tax_meta( $term_id, $name, $new );
+    }
   }
   
   /*
@@ -1003,14 +1032,26 @@ class Tax_Meta_Class {
           $temp[] = $n;
       }
       if (isset($temp) && count($temp) > 0 && !$this->is_array_empty($temp)){
-        $this->update_tax_meta($term_id,$field['id'],$temp);
+        if ( function_exists('update_term_meta')){ 
+          update_term_meta( $term_id,$field['id'],$temp );
+        }else{
+          $this->update_tax_meta( $term_id,$field['id'],$temp );
+        }
       }else{
         //  remove old meta if exists
-        $this->delete_tax_meta($term_id,$field['id']);
+        if ( function_exists('delete_term_meta')){ 
+          delete_term_meta($term_id, $field['id']);
+        }else{
+          $this->delete_tax_meta($term_id,$field['id']);
+        }
       }
     }else{
       //  remove old meta if exists
-      $this->delete_tax_meta($term_id,$field['id']);
+      if ( function_exists('delete_term_meta')){ 
+        delete_term_meta($term_id, $field['id']);
+      }else{
+        $this->delete_tax_meta($term_id,$field['id']);
+      }      
     }
   }
   
@@ -1027,11 +1068,19 @@ class Tax_Meta_Class {
   public function save_field_file( $term_id, $field, $old, $new ) {
 
     $name = $field['id'];
-    $this->delete_tax_meta( $term_id, $name );
+    if ( function_exists('delete_term_meta')){ 
+      delete_term_meta($term_id, $name);
+    }else{
+      $this->delete_tax_meta($term_id,$name);
+    }
     if ( $new === '' || $new === array() || $new['id'] == '' || $new['url'] == '') 
       return;
     
-    $this->update_tax_meta( $term_id, $name, $new );
+    if ( function_exists('update_term_meta')){ 
+      update_term_meta( $term_id, $name, $new);
+    }else{
+      $this->update_tax_meta( $term_id, $name, $new );
+    }
   }
   
   
@@ -1662,6 +1711,9 @@ class Tax_Meta_Class {
    */
   public function delete_taxonomy_metadata($term,$term_id) {
     delete_option( 'tax_meta_'.$term_id );
+    if ( function_exists( 'delete_term_meta') ){
+      delete_term_meta( $term_id );
+    }
   }
 
   

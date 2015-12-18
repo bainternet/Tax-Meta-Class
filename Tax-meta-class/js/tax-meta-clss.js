@@ -52,26 +52,15 @@ function update_repeater_fields(){
       
     });
   
-    /**
-     * Colorpicker Field.
-     *
-     * @since 1.0
-     */
-    /*
-    
-    
-    
+       
     /**
      * Select Color Field.
      *
-     * @since 1.0
+     * uses: wpColorPicker
+     *
+     * @since 2.1.1
      */
-    $('.at-color-select').click( function(){
-      var $this = $(this);
-      var id = $this.attr('rel');
-      $(this).siblings('.at-color-picker').farbtastic("#" + id).toggle();
-      return false;
-    });
+    $('.at-color').wpColorPicker();
   
     /**
      * Delete File.
@@ -165,22 +154,6 @@ jQuery(document).ready(function($) {
     
   });
 
-  /**
-   * Colorpicker Field.
-   *
-   * @since 1.0
-   * better handler for color picker with repeater fields support
-   * which now works both when button is clicked and when field gains focus.
-   */
-  $(document).on('focus','.at-color', function() {
-    var $this = $(this);
-    $(this).siblings('.at-color-picker').farbtastic($this).toggle();
-  });
-
-  $(document).on('focusout','.at-color', function() {
-    var $this = $(this);
-    $(this).siblings('.at-color-picker').farbtastic($this).toggle();
-  });
   
   /**
    * Helper Function

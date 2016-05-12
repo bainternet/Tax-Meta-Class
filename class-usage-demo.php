@@ -63,6 +63,8 @@ if (is_admin()){
   $my_meta->addWysiwyg($prefix.'wysiwyg_field_id',array('name'=> __('My wysiwyg Editor ','tax-meta')));
   //taxonomy field
   $my_meta->addTaxonomy($prefix.'taxonomy_field_id',array('taxonomy' => 'category'),array('name'=> __('My Taxonomy ','tax-meta')));
+  //user field
+  $my_meta->addUser($prefix.'user_field_id',array('name'=> __('My User ','tax-meta')));
   //posts field
   $my_meta->addPosts($prefix.'posts_field_id',array('args' => array('post_type' => 'page')),array('name'=> __('My Posts ','tax-meta')));
   

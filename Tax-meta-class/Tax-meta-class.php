@@ -112,8 +112,11 @@ class Tax_Meta_Class {
     if (isset($meta_box['use_with_theme'])){
       if ($meta_box['use_with_theme'] === true){
         $this->SelfPath = get_template_directory_uri() . '/Tax-meta-class';
-      }elseif($meta_box['use_with_theme'] === false){
-        $this->SelfPath = plugins_url( 'Tax-meta-class', plugin_basename( dirname( __FILE__ ) ) );
+      }elseif($meta_box['use_with_theme'] === false) {
+        $site_url = get_site_url();
+        $current_dir_path = dirname(__FILE__);
+        $this->SelfPath = $site_url . '/' . wp_normalize_path( substr( $current_dir_path, strpos( $current_dir_path, 'wp-content' ) ) );
+        $this->SelfPath = $this->SelfPath . '/';
       }else{
         $this->SelfPath = $meta_box['use_with_theme'];
       }

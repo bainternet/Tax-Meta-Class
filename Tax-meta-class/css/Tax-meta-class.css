@@ -16,7 +16,8 @@
 	width: auto; 
 }
 .at-radio-label{ padding-right: 10px; }				
-.at-file-upload-label{ clear: both; margin: 5px 0px 5px 1px; }	
+.at-file-upload-label{ clear: both; margin: 5px 0px 5px 1px; }
+
 
 
 /* =Form Fields
@@ -61,3 +62,9 @@
 /* inline */
 .at-inline label{font-size: 12px !important;}
 .at-inline textarea{height: 130px;width: 200px;}
+.at-inline{line-height: 1 !important;}
+.at-inline .at-field{border: 0px !important;}
+.at-inline .at-label{margin: 0 0 1px !important;}
+.at-inline .at-text{width: 70px;}
+.at-inline .at-textarea{width: 100px; height: 75px;}
+.at-repater-block{background-color: #FFFFFF;border: 1px solid;margin: 2px;}

@@ -8,9 +8,18 @@ Author: Bainternet, Ohad Raz
 Author URI: https://en.bainternet.info
 */
 
-
+define( 'TAX_META_CLASS_ABSPATH', plugin_dir_path( __FILE__ ) );
 //include the main class file
-require_once("Tax-meta-class/Tax-meta-class.php");
+$files_to_include = array(
+	'Tax-meta-class/Tax-meta-class.php',
+	'Tax-meta-class/includes/ajax.php',
+	'Tax-meta-class/includes/templates.php',
+);
+
+foreach ( $files_to_include as $file ) {
+	require_once( TAX_META_CLASS_ABSPATH . $file );
+}
+
 if (is_admin()){
   /* 
    * prefix of meta keys, optional
@@ -52,11 +61,11 @@ if (is_admin()){
   //date field
   $my_meta->addDate($prefix.'date_field_id',array('name'=> __('My Date ','tax-meta')));
   //Time field
-  $my_meta->addTime($prefix.'time_field_id',array('name'=> __('My Time ','tax-meta')));
+  /$my_meta->addTime($prefix.'time_field_id',array('name'=> __('My Time ','tax-meta')));
   //Color field
   $my_meta->addColor($prefix.'color_field_id',array('name'=> __('My Color ','tax-meta')));
-  //Image field
-  $my_meta->addImage($prefix.'image_field_id',array('name'=> __('My Image ','tax-meta')));
+ // //Image field
+  //$my_meta->addImage($prefix.'image_field_id',array('name'=> __('My Image ','tax-meta')));
   //file upload field
   $my_meta->addFile($prefix.'file_field_id',array('name'=> __('My File ','tax-meta')));
   //wysiwyg field
@@ -74,7 +83,7 @@ if (is_admin()){
   $repeater_fields[] = $my_meta->addText($prefix.'re_text_field_id',array('name'=> __('My Text ','tax-meta')),true);
   $repeater_fields[] = $my_meta->addTextarea($prefix.'re_textarea_field_id',array('name'=> __('My Textarea ','tax-meta')),true);
   $repeater_fields[] = $my_meta->addCheckbox($prefix.'re_checkbox_field_id',array('name'=> __('My Checkbox ','tax-meta')),true);
-  $repeater_fields[] = $my_meta->addImage($prefix.'image_field_id',array('name'=> __('My Image ','tax-meta')),true);
+  //$repeater_fields[] = $my_meta->addImage($prefix.'image_field_id',array('name'=> __('My Image ','tax-meta')),true);
   
   /*
    * Then just add the fields to the repeater block

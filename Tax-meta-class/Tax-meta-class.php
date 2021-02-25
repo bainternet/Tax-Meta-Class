@@ -705,8 +705,13 @@ class Tax_Meta_Class {
     $name         = esc_attr( $field['id'] );
     $value        = isset($meta['id']) ? $meta : $std;
     //backwords capability
-    if (!isset($value['url']))
-    $value['url'] = '';
+      if (is_array($value) && ! isset( $value['url'] ) )
+      {
+          $value['url'] = '';
+      }else{
+          $value = array();
+          $value['url'] = '';
+      }
     if (!isset($value['id']))
     $value['id'] = '';
     $value['url'] = isset($value['src'])? $value['src']: $value['url'];

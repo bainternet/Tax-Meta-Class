@@ -1707,7 +1707,8 @@ class Tax_Meta_Class {
   public function delete_taxonomy_metadata($term,$term_id) {
     delete_option( 'tax_meta_'.$term_id );
     if ( function_exists( 'delete_term_meta') ){
-      delete_term_meta( $term_id );
+      foreach( $this->_fields as $field )
+        delete_term_meta( $term_id, $field );
     }
   }
 

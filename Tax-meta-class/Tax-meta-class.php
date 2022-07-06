@@ -534,6 +534,20 @@ class Tax_Meta_Class {
   }
   
   /**
+   * Show Field Number.
+   *
+   * @param number $field 
+   * @param string $meta 
+   * @since 1.0
+   * @access public
+   */
+  public function show_field_number( $field, $meta) {  
+    $this->show_field_begin( $field, $meta );
+    echo "<input type='number' class='at-text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' style='{$field['style']}' size='30' />";
+    $this->show_field_end( $field, $meta );
+  }
+  
+  /**
    * Show Field hidden.
    *
    * @param string $field 
